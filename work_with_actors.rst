@@ -1,3 +1,68 @@
+Install the CLI
+===============
+
+The Tapis CLI is available as a Python package. We highly recommend using
+Python 3.7+ as the Python runtime behind the Tapis CLI.
+
+Install with Pip
+----------------
+
+.. code-block:: bash
+
+   $ pip3 install tapis-cli
+
+
+Initialize a Session
+====================
+
+You must set up a Tapis session on each host where you will use the Tapis CLI.
+This is a scripted process implemented by the command :code:`tapis auth init`.
+
+.. code-block:: text
+
+   $ tapis auth init
+
+   +---------------+--------------------------------------+----------------------------------------+
+   |      Name     |             Description              |                  URL                   |
+   +---------------+--------------------------------------+----------------------------------------+
+   |      3dem     |             3dem Tenant              |         https://api.3dem.org/          |
+   |     a2cps     |   Acute to Chronic Pain Signatures   |         https://api.a2cps.org/         |
+   |   agave.prod  |         Agave Public Tenant          |      https://public.agaveapi.co/       |
+   |  araport.org  |               Araport                |        https://api.araport.org/        |
+   |     bridge    |                Bridge                |     https://api.bridge.tacc.cloud/     |
+   |   designsafe  |              DesignSafe              |    https://agave.designsafe-ci.org/    |
+   |  iplantc.org  |         CyVerse Science APIs         |       https://agave.iplantc.org/       |
+   |      irec     |              iReceptor               | https://irec.tenants.prod.tacc.cloud/  |
+   |    portals    |            Portals Tenant            |  https://portals-api.tacc.utexas.edu/  |
+   |      sd2e     |             SD2E Tenant              |         https://api.sd2e.org/          |
+   |      sgci     | Science Gateways Community Institute |        https://sgci.tacc.cloud/        |
+   |   tacc.prod   |                 TACC                 |      https://api.tacc.utexas.edu/      |
+   | vdjserver.org |              VDJ Server              | https://vdj-agave-api.tacc.utexas.edu/ |
+   +---------------+--------------------------------------+----------------------------------------+
+
+   Enter a tenant name [tacc.prod]:
+
+   Container registry access:
+   --------------------------
+   Registry Url [e]:
+   Registry Username [docker_username]:
+   Registry Password:
+   Registry Namespace [docker_namespace]:
+   +--------------------+----------------------------------+
+   | Field              | Value                            |
+   +--------------------+----------------------------------+
+   | tenant_id          | tacc.prod                        |
+   | username           | sgopal                           |
+   | api_key            | $API_KEY                         |
+   | access_token       | $ACCESS_TOKEN                    |
+   | expires_at         | Thu Jul 15 13:11:02 2021         |
+   | verify             | True                             |
+   | registry_url       | e                                |
+   | registry_username  | docker_username                  |
+   | registry_password  |                                  |
+   | registry_namespace | docker_namespace                 |
+   +--------------------|-----------------------------------
+
 Work with Actors
 ================
 
@@ -22,7 +87,7 @@ Create a New Actor
 The function of an actor is exposed as the default command in a Docker
 container. Here, we will create an actor from an existing Docker container image
 called **tacc/hello-world:latest** available on
-'Docker Hub <https://hub.docker.com/repository/docker/tacc/hello-world>'__.
+`Docker Hub <https://hub.docker.com/repository/docker/tacc/hello-world>`__.
 The default command for this container simply prints the message "Hello, World" or
 the message sent to it, which will be captured in the actor logs.
 
@@ -47,8 +112,7 @@ Create the actor as:
 
 The ``--repo`` flag points to the Docker Hub repo on which this actor is based,
 the ``-n`` flag and ``-d`` flag attach a human-readable name and description to
-the actor, the ``-e`` flags demonstrate how to set (optional) environment
-variables for the actor.
+the actor.
 
 The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
@@ -89,8 +153,7 @@ queried by:
     }
 
 
-Above, you can see the plain text name, description, and any default environment
-variables that were passed on the command line. In addition, you can see the
+Above, you can see the plain text name, description that were passed on the command line. In addition, you can see the
 "status" of the actor is "READY", meaning it is ready to receive and act on
 messages. Finally, you can list all actors visible to you with:
 
@@ -103,71 +166,6 @@ messages. Finally, you can list all actors visible to you with:
    | NN5N0kGDvZQpA | example-actor | taccuser | tacc/hello-world:latest     | 2021-07-14T22:25:06.171Z   | READY  | False |
    +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
 
-
-Probe the Underlying Container
-------------------------------
-
-An actor now exists and is waiting for a message to respond to. But, how will
-the actor respond when sent a message? We can probe the underlying container to
-figure out what this specific actor will do. First pull the container locally:
-
-.. code-block:: bash
-
-   $ docker pull tacc/hello-world:latest
-   latest: Pulling from tacc/hello-world
-   Digest: sha256:baf7241b9d6fb1b123825021b831337307b9fa0aa4d45b14c9405ebf2a36a929
-   Status: Image is up to date for tacc/hello-world:latest
-   docker.io/tacc/hello-world:latest
-
-Then find the default command for the container:
-
-.. code-block:: bash
-
-   $ docker inspect tacc/hello-world:latest | jq ".[].ContainerConfig.Cmd"
-   [
-    "/bin/sh",
-    "-c",
-    "#(nop) ",
-    "CMD [\"python\" \"/hello_world.py\"]"
-   ]
-
-It runs ``hello_world.py`` at the root level. Print out the contents of ``hello_world.py``
-to inspect:
-
-.. code-block:: bash
-
-   $ docker run --rm tacc/hello-world:latest cat /hello_world.py
-
-.. code-block:: python
-   :emphasize-lines: 10
-
-    1 #!/usr/bin/env python
-    2
-    3 import os
-    4 import sys
-    5 import json
-    6 from agavepy.actors import get_context
-    7
-    8 if __name__ == '__main__':
-    9
-   10     context = get_context()
-   11     print 'FULL CONTEXT:'
-   12     print json.dumps(context, indent=2)
-   13
-   14     print '\nMESSAGE:'
-   15     message = context.message_dict
-   16     print json.dumps(message, indent=2)
-   17
-   18     print '\nFULL ENVIRONMENT:'
-   19     print json.dumps(dict(os.environ), indent=2)
-   20
-   21     print '\nROOT FILES:'
-   22     print ' '.join(os.listdir('/'))
-
-
-This container, when run, will first get the message that was passed to it (from
-the ``get_context()`` function, line 10). Then it will print various parts of
-the message and the environment.
 
 Submit a Message to the Actor
 -----------------------------
@@ -211,7 +209,7 @@ execution with:
 
 .. code-block:: bash
 
-   $ tapis actors execs show -v boEg3mEvrKO5w ayB45Oe8GJvAA
+   $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
    {
       "actorId": "NN5N0kGDvZQpA",
       "apiServer": "https://api.tacc.utexas.edu",
@@ -258,11 +256,7 @@ actor. In our demo actor, we just expect the actor to print the message passed t
     Actor received message: Hello, World
 
 
-
-Sure enough, the information in the execution logs match what we expected
-``hello_world.py`` to print. The message was pulled in by the
-```get_context()`` function. It was not done in this script, but in a normal
-scenario, the actor would then act on the contents of that message to, e.g.,
+In a normal scenario, the actor would then act on the contents of a message to, e.g.,
 kick off a job, perform some data management, send messages to other actors, or
 more.
 
@@ -280,7 +274,6 @@ meaning the command line stays attached to the process awaiting a response after
 sending a message to the actor. For example:
 
 .. code-block:: bash
-   :emphasize-lines: 9
 
    $ tapis actors run -m "$MESSAGE" NN5N0kGDvZQpA
    FULL CONTEXT:
@@ -290,7 +283,6 @@ sending a message to the actor. For example:
      "_abaco_worker_id": "X5xGkZ0lol0D3",
      "raw_message": "{\"key1\":\"value1\", \"key2\":\"value2\"}",
      "actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
-     "new_foo": "new_bar",
      "_abaco_container_repo": "jturcino/abaco-trial:latest",
      "content_type": null,
      "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
@@ -302,41 +294,18 @@ sending a message to the actor. For example:
      "execution_id": "jP3RExQW108wM",
      "_abaco_synchronous": "True",
      "_abaco_access_token": "de6d11bdbb5a16bdd85beec692b1b283",
-     "message_dict": {
-       "key2": "value2",
-       "key1": "value1"
-     },
      "_abaco_api_server": "https://api.tacc.utexas.edu",
      "_abaco_actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
      "_abaco_jwt_header_name": "X-Jwt-Assertion-Tacc-Prod",
-     "_abaco_actor_id": "boEg3mEvrKO5w",
+     "_abaco_actor_id": "NN5N0kGDvZQpA",
      "_abaco_execution_id": "jP3RExQW108wM",
      "state": "{}",
      "_abaco_username": "taccuser",
-     "actor_id": "boEg3mEvrKO5w"
+     "actor_id": "NN5N0kGDvZQpA"
    }
    ...
 
 The output above is truncated because it is mostly the same response as our
 first execution of the actor. This time, however, we did not need to query the
 logs for this execution for them to print to screen - that was done
-automatically. In addition, the new environment variable settings can be seen
-in the context (see highlighted line).
-
-
-Delete an Actor
----------------
-
-Similar to other resources in Tapis, actors can be deleted with the following:
-
-.. code-block:: bash
-
-   $ tapis actors delete NN5N0kGDvZQpA
-   +----------+-------------------+
-   | Field    | Value             |
-   +----------+-------------------+
-   | deleted  | ['NN5N0kGDvZQpA'] |
-   | messages | []                |
-   +----------+-------------------+
-
-This will delete the actor and any associated executions.
+automatically.

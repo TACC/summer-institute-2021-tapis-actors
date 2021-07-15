@@ -8,7 +8,7 @@ ADD requirements.txt /requirements.txt
 RUN pip3 install -r /requirements.txt
 
 # add the python script to docker container
-ADD hello_world.py /hello_world.py
+ADD actor.py /actor.py
 
 # command to run the python script
-CMD ["python", "/hello_world.py"]
+CMD ["python", "/actor.py"]
