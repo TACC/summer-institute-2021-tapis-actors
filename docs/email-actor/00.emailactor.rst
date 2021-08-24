@@ -15,6 +15,7 @@ Create the actor as:
    $ tapis actors create --repo tacc/email-actor:latest \
                          -n email-actor \
                          -d "Test actor that emails Hello, World"
+                         -E secrets.json
     +----------------+----------------------------+
     | Field          | Value                      |
     +----------------+----------------------------+

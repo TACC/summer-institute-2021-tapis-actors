@@ -40,15 +40,12 @@ be found. An example of a functional actor that says "Hello, World!" is:
    import smtplib
 
    # function to email the message
-   def email_message(m):
+   def email_message(m, user_email, user_password):
    """Send Email from Actor With User Message"""
 
       if m == " ":
           print("Empty Message!")
       else:
-          context = get_context()
-          user_email = context["USER_EMAIL"]
-          password = context["USER_PASSWORD"]
           sent_from = user_email
           to = ['shwetagopaul92@gmail.com']
           subject = 'Actor Email'
@@ -69,7 +66,9 @@ be found. An example of a functional actor that says "Hello, World!" is:
     """Main entry to grab message context from user input"""
         context = get_context()
         message = context['raw_message']
-        email_message(message)
+        user_email = context['USER_EMAIL']
+        user_password = context['USER_PASSWORD']
+        email_message(message, user_email, user_password)
 
     if __name__ == '__main__':
         main()
