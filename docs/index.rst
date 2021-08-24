@@ -9,8 +9,10 @@ Welcome to Hello World Tapis Actors's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   
-   hello-world-actor/00.buildhelloworld
+
+   hello-world-actor/00.containerizeryourcode
+   email-actor/00.containerizeryourcode
+   slack-webhook/00.slackwebhook
 
 
 Indices and tables
