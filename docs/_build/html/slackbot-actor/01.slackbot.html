@@ -36,15 +36,14 @@
 <h1>Slackbot Actor<a class="headerlink" href="#slackbot-actor" title="Permalink to this headline">¶</a></h1>
 <p>In this section, let us create an actor that sends a message to a Slack Channel via webhook.
 Customize the channel, apparent username, and of course, the text message. You provide the Slack webhook!</p>
-</div>
 <div class="section" id="build-and-deploy">
-<h1>Build and deploy<a class="headerlink" href="#build-and-deploy" title="Permalink to this headline">¶</a></h1>
+<h2>Build and deploy<a class="headerlink" href="#build-and-deploy" title="Permalink to this headline">¶</a></h2>
 <p>Configure a Slack webhook or request one from your organization.
 Customize secrets.json based on the sample to set options such as name,
 channel whitelist, and apparent username.</p>
 </div>
 <div class="section" id="the-webbook">
-<h1>The Webbook<a class="headerlink" href="#the-webbook" title="Permalink to this headline">¶</a></h1>
+<h2>The Webbook<a class="headerlink" href="#the-webbook" title="Permalink to this headline">¶</a></h2>
 <p>How do we get the webhook into our Actor? We don’t. Instead of embedding it in the underlying container, it is defined as an environment variable in
 the Actor. We must set SLACK_WEBHOOK. This can be done using Tapis CLI.
 In the tapis actors create command, one passes a JSON document containing default environment variables via the -e flag.</p>
@@ -58,7 +57,7 @@ In the tapis actors create command, one passes a JSON document containing defaul
 </div>
 </div>
 <div class="section" id="write-the-actor-function">
-<h1>Write the Actor Function<a class="headerlink" href="#write-the-actor-function" title="Permalink to this headline">¶</a></h1>
+<h2>Write the Actor Function<a class="headerlink" href="#write-the-actor-function" title="Permalink to this headline">¶</a></h2>
 <p>An example of a functional actor that says sends a slack message is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Post user message to Slack&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">requests</span>
@@ -103,7 +102,7 @@ In the tapis actors create command, one passes a JSON document containing defaul
 The <code class="docutils literal notranslate"><span class="pre">agavepy</span></code> library includes an “actors” object which is useful to grab the message and other context from the environment.</p>
 </div>
 <div class="section" id="write-the-dockerfile">
-<h1>Write the Dockerfile<a class="headerlink" href="#write-the-dockerfile" title="Permalink to this headline">¶</a></h1>
+<h2>Write the Dockerfile<a class="headerlink" href="#write-the-dockerfile" title="Permalink to this headline">¶</a></h2>
 <p>The requirements are python, agavepy, requests
 simplejson python libraries, which are
 available through
@@ -126,7 +125,7 @@ CMD <span class="o">[</span><span class="s2">&quot;python&quot;</span>, <span cl
 </div>
 </div>
 <div class="section" id="build-docker-container">
-<h1>Build Docker Container<a class="headerlink" href="#build-docker-container" title="Permalink to this headline">¶</a></h1>
+<h2>Build Docker Container<a class="headerlink" href="#build-docker-container" title="Permalink to this headline">¶</a></h2>
 <p>Let us build and push our docker image</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build and tag the image</span>
 $ docker build -t taccuser/slackbot-actor:1.0 .
@@ -145,7 +144,7 @@ The push refers to repository <span class="o">[</span>docker.io/taccuser/slackbo
 </div>
 </div>
 <div class="section" id="create-the-actor">
-<h1>Create the Actor<a class="headerlink" href="#create-the-actor" title="Permalink to this headline">¶</a></h1>
+<h2>Create the Actor<a class="headerlink" href="#create-the-actor" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tapis actors create --repo tacc/slackbot-actor:1.0 <span class="se">\</span>
                       -n slackbot-actor <span class="se">\</span>
                       -d <span class="s2">&quot;Send a message containing text to Slack channel&quot;</span>
@@ -226,7 +225,7 @@ messages.</p>
 </div>
 </div>
 <div class="section" id="submit-a-message-to-the-actor">
-<h1>Submit a Message to the Actor<a class="headerlink" href="#submit-a-message-to-the-actor" title="Permalink to this headline">¶</a></h1>
+<h2>Submit a Message to the Actor<a class="headerlink" href="#submit-a-message-to-the-actor" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write a message</span>
 $ <span class="nb">export</span> <span class="nv">MESSAGE</span><span class="o">=</span><span class="s1">&#39;Hello, Slack!&#39;</span>
 $ <span class="nb">echo</span> <span class="nv">$MESSAGE</span>
@@ -246,7 +245,7 @@ Let us grab the executionId from here to track the progress of the actor.
 </div>
 </div>
 <div class="section" id="list-executions-of-actor">
-<h1>List Executions of Actor<a class="headerlink" href="#list-executions-of-actor" title="Permalink to this headline">¶</a></h1>
+<h2>List Executions of Actor<a class="headerlink" href="#list-executions-of-actor" title="Permalink to this headline">¶</a></h2>
 <p>Let us grab the executionId from here to track the progress of the actor.
 The above execution has already completed. Show detailed information for the
 execution with:</p>
@@ -286,7 +285,7 @@ execution with:</p>
 </div>
 </div>
 <div class="section" id="check-the-logs-for-an-execution">
-<h1>Check the Logs for an Execution<a class="headerlink" href="#check-the-logs-for-an-execution" title="Permalink to this headline">¶</a></h1>
+<h2>Check the Logs for an Execution<a class="headerlink" href="#check-the-logs-for-an-execution" title="Permalink to this headline">¶</a></h2>
 <p>In our slackbot-actor, we expect the actor to print the message passed to it and notify on the slack channel.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tapis actors execs logs ww15Ex5oLxJ6b EjO6yw03GKRmR
 Logs <span class="k">for</span> execution EjO6yw03GKRmR
@@ -295,6 +294,7 @@ Logs <span class="k">for</span> execution EjO6yw03GKRmR
 </div>
 <p>Finally check your Slack channel to find your message!
 Did you find it? Hooray !</p>
+</div>
 </div>
 
 
@@ -320,15 +320,6 @@ Did you find it? Hooray !</p>
 <li class="toctree-l1"><a class="reference internal" href="../email-actor/00.overview.html">Let’s send an Email with Tapis Actors</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="00.overview.html">Slackbot Actor</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Slackbot Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build-and-deploy">Build and deploy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#the-webbook">The Webbook</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#write-the-actor-function">Write the Actor Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#write-the-dockerfile">Write the Dockerfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build-docker-container">Build Docker Container</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-the-actor">Create the Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#submit-a-message-to-the-actor">Submit a Message to the Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#list-executions-of-actor">List Executions of Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#check-the-logs-for-an-execution">Check the Logs for an Execution</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../upstream-messenger/00.deployupstream.html">Automating Work at TACC Tutorial: Messaging Between Actors</a></li>

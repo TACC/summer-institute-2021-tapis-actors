@@ -41,6 +41,7 @@ Install with Pip
 
 We’ll know Tapis CLI installed correctly when the ``tapis -h`` command returns some information about the application:
 
+
 .. code-block:: bash
 
    $ tapis -h

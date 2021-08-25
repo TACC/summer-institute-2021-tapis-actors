@@ -31,7 +31,7 @@ Write the Actor Function
 ------------------------
 
 The ``actor.py`` python script is where the code for your main function can
-be found. An example of a functional actor that says "Hello, World!" is:
+be found. An example of a functional actor that emails the message sent to it:
 
 .. code-block:: python
 
@@ -47,7 +47,7 @@ be found. An example of a functional actor that says "Hello, World!" is:
           print("Empty Message!")
       else:
           sent_from = user_email
-          to = ['shwetagopaul92@gmail.com']
+          to = ['emailaddress']
           subject = 'Actor Email'
           message = m
 

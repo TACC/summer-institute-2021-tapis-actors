@@ -57,7 +57,7 @@ email-actor/
 <div class="section" id="write-the-actor-function">
 <h2>Write the Actor Function<a class="headerlink" href="#write-the-actor-function" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">actor.py</span></code> python script is where the code for your main function can
-be found. An example of a functional actor that says “Hello, World!” is:</p>
+be found. An example of a functional actor that emails the message sent to it:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Send Email from Actor with User Message&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">agavepy.actors</span> <span class="kn">import</span> <span class="n">get_context</span>
 <span class="kn">import</span> <span class="nn">smtplib</span>
@@ -70,7 +70,7 @@ be found. An example of a functional actor that says “Hello, World!” is:</p>
        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Empty Message!&quot;</span><span class="p">)</span>
    <span class="k">else</span><span class="p">:</span>
        <span class="n">sent_from</span> <span class="o">=</span> <span class="n">user_email</span>
-       <span class="n">to</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;shwetagopaul92@gmail.com&#39;</span><span class="p">]</span>
+       <span class="n">to</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;emailaddress&#39;</span><span class="p">]</span>
        <span class="n">subject</span> <span class="o">=</span> <span class="s1">&#39;Actor Email&#39;</span>
        <span class="n">message</span> <span class="o">=</span> <span class="n">m</span>
 

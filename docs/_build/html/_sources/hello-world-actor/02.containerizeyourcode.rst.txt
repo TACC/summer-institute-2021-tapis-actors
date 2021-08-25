@@ -1,7 +1,3 @@
-Hello, World Actor
-==================
-
-
 Create a Custom Actor
 ---------------------
 
@@ -44,6 +40,7 @@ Install with Pip
    $ pip3 install tapis-cli
 
 We’ll know Tapis CLI installed correctly when the ``tapis -h`` command returns some information about the application:
+
 
 .. code-block:: bash
 
