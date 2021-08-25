@@ -1,7 +1,3 @@
-Hello, World Actor
-==================
-
-
 Create a Custom Actor
 ---------------------
 
