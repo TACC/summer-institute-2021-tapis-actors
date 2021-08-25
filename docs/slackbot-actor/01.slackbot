@@ -168,7 +168,7 @@ Create the Actor
      "defaultEnvironment": {
        "SLACK_CHANNEL": "#lsc",
        "SLACK_USERNAME": "tapis-actors",
-       "SLACK_WEBHOOK": "https://hooks.slack.com/services/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"
+       "SLACK_WEBHOOK": "URL"
      },
      "gid": 862347,
      "hints": [],
