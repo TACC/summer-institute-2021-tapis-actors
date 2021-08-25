@@ -1,6 +1,5 @@
-# Hello World Tapis Actors 
+# TACC Summer Institute 2021 Tapis Actors
 
-The "Hello world" of Tapis Actors SDK. This actor says "Hello, World" or the message passed to it.
 
 
 
