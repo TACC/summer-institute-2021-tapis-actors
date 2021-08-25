@@ -1,3 +1,46 @@
+Work with Actors
+================
+
+In Tapis, **actors** are container-based functions-as-a-service that follow the
+actor model of concurrent computation. An actor responds to messages it receives
+by changing its state, performing an action, sending out response messages, or
+all of the above.
+
+The function an actor performs is exposed as the default command in a container.
+It is typically quick and requires little processing power - i.e. an app may be
+configured to
+`run FastQC <../advanced-api/create_a_custom_app.html>`__,
+and an actor may trigger a job using that app.
+
+The guide below is a brief introduction to interacting with actors on the Tapis
+platform. For a full reference guide to actors, see the
+`Abaco Documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
+
+
+Hello World Actor
+=================
+
+Let us build our hello-world-actor!
+
+Before diving in, let's make sure we have the following resources:
+
+Prerequisites
+-------------
+
+Before getting started, you need to have the following:
+
+- TACC training accounts
+- Familiarity with working at the command line
+- Have Docker installed on your laptop:
+
+
+* Install Docker on your laptop:
+
+  - `Mac <https://docs.docker.com/docker-for-mac/>`_
+  - `Windows <https://docs.docker.com/docker-for-windows/>`_
+  - `Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_
+
+
 Install the CLI
 ===============
 
@@ -12,11 +55,45 @@ Install with Pip
    $ pip3 install tapis-cli
 
 
-Initialize a Session
-====================
+We’ll know Tapis CLI installed correctly when the ``tapis -h`` command returns some information about the application:
 
+.. code-block:: bash
+
+   $ tapis -h
+
+   usage: tapis [--version] [-v | -q] [--log-file LOG_FILE] [-h] [--debug]
+
+   Tapis CLI: Scripting interface to the Tapis platform. Documentation at
+   https://tapis-cli.rtfd.io/. For support contact "TACC Help" <help@tacc.cloud>
+
+   optional arguments:
+    --version            show program's version number and exit
+    -v, --verbose        Increase verbosity of output. Can be repeated.
+    -q, --quiet          Suppress output except warnings and errors.
+    --log-file LOG_FILE  Specify a file to log output. Disabled by default.
+    -h, --help           Show help message and exit.
+    --debug              Show tracebacks on errors.
+
+   Commands:
+    actors aliases create  Add an Alias for an Actor
+    actors aliases delete  Delete an Actor Alias
+    actors aliases list  List all Actor Aliases
+    actors aliases show  Show details for an Actor Alias
+    actors aliases update  Update an Alias to resolve to a different Actor
+    actors create  Create an Actor
+    actors delete  Delete an Actor
+    ...
+
+
+Initialize a Tapis Session
+==========================
+
+We will have to initialize a client before we can use Tapis CLI.
 You must set up a Tapis session on each host where you will use the Tapis CLI.
 This is a scripted process implemented by the command :code:`tapis auth init`.
+
+You will be prompted to Enter a tenant name.
+We will be using the tacc.prod tenant, so type that as the tenant name and press enter.
 
 .. code-block:: text
 
@@ -63,26 +140,25 @@ This is a scripted process implemented by the command :code:`tapis auth init`.
    | registry_namespace | docker_namespace                 |
    +--------------------|-----------------------------------
 
-Work with Actors
-================
+Run ``tapis auth show`` to see the newly created access_token and refresh_token.
 
-In Tapis, **actors** are container-based functions-as-a-service that follow the
-actor model of concurrent computation. An actor responds to messages it receives
-by changing its state, performing an action, sending out response messages, or
-all of the above.
+.. code-block:: bash
 
-The function an actor performs is exposed as the default command in a container.
-It is typically quick and requires little processing power - i.e. an app may be
-configured to
-`run FastQC <../advanced-api/create_a_custom_app.html>`__,
-and an actor may trigger a job using that app.
+   $ tapis auth show
+   +---------------+----------------------------------+
+   | Field         | Value                            |
+   +---------------+----------------------------------+
+   | tenant_id     | sd2e                             |
+   | username      | sgopal                           |
+   | api_key       | 8sXXXYgsfsfswtyySSXXXXXXXcsft    |
+   | access_token  | 11XXXXXXXXXXXXXXXXXXXXXXXXXXXX   |
+   | expires_at    | Wed Aug 25 10:25:09 2021         |
+   | refresh_token | 6ac717bXXXXXXXXXXXXX91d46ab7ae   |
+   +---------------+----------------------------------+
 
-The guide below is a brief introduction to interacting with actors on the Tapis
-platform. For a full reference guide to actors, see the
-`Abaco Documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
 
 Create a New Actor
-------------------
+==================
 
 The function of an actor is exposed as the default command in a Docker
 container. Here, we will create an actor from an existing Docker container image
@@ -283,10 +359,10 @@ sending a message to the actor. For example:
      "_abaco_worker_id": "X5xGkZ0lol0D3",
      "raw_message": "{\"key1\":\"value1\", \"key2\":\"value2\"}",
      "actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
-     "_abaco_container_repo": "jturcino/abaco-trial:latest",
+     "_abaco_container_repo": "taccuser/hello-world:1.0",
      "content_type": null,
      "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-     "MSG": "{\"key1\":\"value1\", \"key2\":\"value2\"}",
+     "MSG": "Hello, World!",
      "HOME": "/",
      "_abaco_actor_state": "{}",
      "_abaco_actor_name": "example-actor",
@@ -309,3 +385,6 @@ The output above is truncated because it is mostly the same response as our
 first execution of the actor. This time, however, we did not need to query the
 logs for this execution for them to print to screen - that was done
 automatically.
+
+
+If you have any additional questions or are having issues, please post it in our Slack channel

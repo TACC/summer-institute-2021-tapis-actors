@@ -3,8 +3,8 @@ Create a Custom Actor
 
 This guide will demonstrate how to create a custom actor from scratch.
 
-In this example, we will build a simple hello-world actor that says "Hello, World!".
-
+In this example, we will build a simple actor that emails the message
+sent to it.
 
 
 Components of an Actor
@@ -14,12 +14,12 @@ Make a new directory and add the following files:
 
 .. code-block:: bash
 
-   $ mkdir hello-world-actor/ && cd hello-world-actor/
+   $ mkdir email-actor/ && cd email-actor/
 
    $ touch Dockerfile requirements.txt actor.py
 
-   $ tree ../hello-world-actor/
-   hello-world-actor/
+   $ tree ../email-actor/
+   email-actor/
    ├── Dockerfile
    ├── requirements.txt
    └── actor.py
@@ -35,25 +35,44 @@ be found. An example of a functional actor that says "Hello, World!" is:
 
 .. code-block:: python
 
-   """Say Hello, World or the message received from user input"""
+   """Send Email from Actor with User Message"""
    from agavepy.actors import get_context
+   import smtplib
 
-   # function to print the message
-   def say_hello_world(m):
-   """Print message from user if present, else echo "Hello, World"""
+   # function to email the message
+   def email_message(m, user_email, user_password):
+   """Send Email from Actor With User Message"""
+
       if m == " ":
-          print("Actor says: Hello, World")
+          print("Empty Message!")
       else:
-          print("Actor received message: {}".format(m))
+          sent_from = user_email
+          to = ['shwetagopaul92@gmail.com']
+          subject = 'Actor Email'
+          message = m
 
-  def main():
-  """Main entry to grab message context from user input"""
-      context = get_context()
-      message = context['raw_message']
-      say_hello_world(message)
+      try:
+          smtp_server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+          smtp_server.ehlo()
+          smtp_server.login(user_email, password)
+          smtp_server.sendmail(sent_from, to, message)
+          smtp_server.close()
+          print("Email sent successfully!")
+      except Exception as ex:
+          print("Exception occured",ex)
 
-  if __name__ == '__main__':
-      main()
+
+    def main():
+    """Main entry to grab message context from user input"""
+        context = get_context()
+        message = context['raw_message']
+        user_email = context['USER_EMAIL']
+        user_password = context['USER_PASSWORD']
+        email_message(message, user_email, user_password)
+
+    if __name__ == '__main__':
+        main()
+
 
 
 This code makes use of the **agavepy** python library which we will install in
@@ -62,27 +81,34 @@ grab the message and other context from the environment. And, it can be used to
 interact with other parts of the Tapis platform. Add the above code to your
 ``actor.py`` file.
 
+Here we are using the `smtplib <https://docs.python.org/3/library/smtplib.html>`_
+SMTP protocol client to send email to any Internet machine.
+
 
 Define Environment Variables
 ----------------------------
 
-The ``environment.json`` file may contain useful environment variables or
+We will create another file called ``secrets.json``.
+The ``secrets.json`` file may contain useful environment variables or
 configurations to pass to the actor at creation time. These variables will be
 part of the "context" taken from the environment, as in the example python
 script above. For the purposes of this example, add the following definition to
-``environment.json``:
+``secrets.json``:
 
 .. code-block:: json
 
    {
-     "foo": "bar"
+     "USER_EMAIL": "foo",
+     "USER_PASSWORD": "bar"
    }
 
+Since we are connecting to the smtp server, we will have to add our email credentials to the
+above file.
 
 Create a Dockerfile
 -------------------
 
-The only requirements are python and the agavepy python library, which is
+The requirements are python, agavepy which is
 available through
 `PyPi <https://pypi.org/>`_.
 A bare-bones Dockerfile needs to satisfy those dependencies, add the actor
@@ -121,15 +147,15 @@ and push to a repository that you have access to:
 .. code-block:: bash
 
    # Build and tag the image
-   $ docker build -t taccuser/hello-world:1.0 .
+   $ docker build -t taccuser/email-actor:1.0 .
    Sending build context to Docker daemon  4.096kB
    Step 1/5 : FROM python:3.7-slim
    ...
    Successfully built b0a76425e8b3
-   Successfully tagged taccuser/hello-world:1.0
+   Successfully tagged taccuser/email-actor:1.0
 
    # Push the tagged image to Docker Hub
-   $ docker push taccuser/hello-world:1.0
+   $ docker push taccuser/email-actor:1.0
    The push refers to repository [docker.io/taccuser/word-count]
    ...
    1.0: digest: sha256:67cc6f6f00589d9ae83b99d779e4893a25e103d07e4f660c14d9a0ee06a9ddaf size: 1995

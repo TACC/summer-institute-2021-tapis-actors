@@ -30,10 +30,11 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="send-email-message-from-actor">
+  <p>In this section, let us create the actor from the Docker container and test it by sending a message.</p>
+<div class="section" id="send-email-message-from-actor">
 <h1>Send Email Message From Actor<a class="headerlink" href="#send-email-message-from-actor" title="Permalink to this headline">¶</a></h1>
 <p>The function of an actor is exposed as the default command in a Docker
-container. Here, we will create an actor from an existing Docker container image
+container. Let us create an actor from an existing Docker container image
 called <strong>tacc/email-actor:latest</strong> available on
 <a class="reference external" href="https://hub.docker.com/repository/docker/tacc/email-actor">Docker Hub</a>.
 The default command for this container emails the message “Hello, World” or
@@ -178,61 +179,16 @@ execution with:</p>
 <div class="section" id="check-the-logs-for-an-execution">
 <h1>Check the Logs for an Execution<a class="headerlink" href="#check-the-logs-for-an-execution" title="Permalink to this headline">¶</a></h1>
 <p>An execution’s logs will contain whatever was printed to STDOUT / STDERR by the
-actor. In our demo actor, we just expect the actor to print the message passed to it.</p>
+actor. In our demo actor, we expect the actor to print the message passed to it, and
+email the message to the recipient email address we mentioned above.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tapis actors execs logs w66kex1yD7Ql w1plap4NalAWb
 Logs <span class="k">for</span> execution w1plap4NalAWb
  Actor received message: Hello, World
  Message emailed successfully!
 </pre></div>
 </div>
-<p>In a normal scenario, the actor would then act on the contents of a message to, e.g.,
-kick off a job, perform some data management, send messages to other actors, or
-more.</p>
-</div>
-<div class="section" id="run-synchronously">
-<h1>Run Synchronously<a class="headerlink" href="#run-synchronously" title="Permalink to this headline">¶</a></h1>
-<p>The previous message submission (with <code class="docutils literal notranslate"><span class="pre">tapis</span> <span class="pre">actors</span> <span class="pre">submit</span></code>) was an
-<em>asynchronous</em> run, meaning the command prompt detached from the process after
-it was submitted to the actor. In that case, it was up to us to check the execution
-to see if it had completed and manually print the logs.</p>
-<p>There is also a mode to run actors <em>synchronously</em> using <code class="docutils literal notranslate"><span class="pre">tapis</span> <span class="pre">actors</span> <span class="pre">run</span></code>,
-meaning the command line stays attached to the process awaiting a response after
-sending a message to the actor. For example:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tapis actors run -m <span class="s2">&quot;</span><span class="nv">$MESSAGE</span><span class="s2">&quot;</span> w66kex1yD7Ql
-FULL CONTEXT:
-<span class="o">{</span>
-  <span class="s2">&quot;username&quot;</span>: <span class="s2">&quot;taccuser&quot;</span>,
-  <span class="s2">&quot;HOSTNAME&quot;</span>: <span class="s2">&quot;33d4dd334ef9&quot;</span>,
-  <span class="s2">&quot;_abaco_worker_id&quot;</span>: <span class="s2">&quot;X5xGkZ0lol0D3&quot;</span>,
-  <span class="s2">&quot;raw_message&quot;</span>: <span class="s2">&quot;{\&quot;key1\&quot;:\&quot;value1\&quot;, \&quot;key2\&quot;:\&quot;value2\&quot;}&quot;</span>,
-  <span class="s2">&quot;actor_dbid&quot;</span>: <span class="s2">&quot;TACC-PROD_boEg3mEvrKO5w&quot;</span>,
-  <span class="s2">&quot;_abaco_container_repo&quot;</span>: <span class="s2">&quot;jturcino/abaco-trial:latest&quot;</span>,
-  <span class="s2">&quot;content_type&quot;</span>: null,
-  <span class="s2">&quot;PATH&quot;</span>: <span class="s2">&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;</span>,
-  <span class="s2">&quot;MSG&quot;</span>: <span class="s2">&quot;{\&quot;key1\&quot;:\&quot;value1\&quot;, \&quot;key2\&quot;:\&quot;value2\&quot;}&quot;</span>,
-  <span class="s2">&quot;HOME&quot;</span>: <span class="s2">&quot;/&quot;</span>,
-  <span class="s2">&quot;_abaco_actor_state&quot;</span>: <span class="s2">&quot;{}&quot;</span>,
-  <span class="s2">&quot;_abaco_actor_name&quot;</span>: <span class="s2">&quot;example-actor&quot;</span>,
-  <span class="s2">&quot;_abaco_Content_Type&quot;</span>: <span class="s2">&quot;str&quot;</span>,
-  <span class="s2">&quot;execution_id&quot;</span>: <span class="s2">&quot;jP3RExQW108wM&quot;</span>,
-  <span class="s2">&quot;_abaco_synchronous&quot;</span>: <span class="s2">&quot;True&quot;</span>,
-  <span class="s2">&quot;_abaco_access_token&quot;</span>: <span class="s2">&quot;de6d11bdbb5a16bdd85beec692b1b283&quot;</span>,
-  <span class="s2">&quot;_abaco_api_server&quot;</span>: <span class="s2">&quot;https://api.tacc.utexas.edu&quot;</span>,
-  <span class="s2">&quot;_abaco_actor_dbid&quot;</span>: <span class="s2">&quot;TACC-PROD_boEg3mEvrKO5w&quot;</span>,
-  <span class="s2">&quot;_abaco_jwt_header_name&quot;</span>: <span class="s2">&quot;X-Jwt-Assertion-Tacc-Prod&quot;</span>,
-  <span class="s2">&quot;_abaco_actor_id&quot;</span>: <span class="s2">&quot;NN5N0kGDvZQpA&quot;</span>,
-  <span class="s2">&quot;_abaco_execution_id&quot;</span>: <span class="s2">&quot;jP3RExQW108wM&quot;</span>,
-  <span class="s2">&quot;state&quot;</span>: <span class="s2">&quot;{}&quot;</span>,
-  <span class="s2">&quot;_abaco_username&quot;</span>: <span class="s2">&quot;taccuser&quot;</span>,
-  <span class="s2">&quot;actor_id&quot;</span>: <span class="s2">&quot;NN5N0kGDvZQpA&quot;</span>
-<span class="o">}</span>
-...
-</pre></div>
-</div>
-<p>The output above is truncated because it is mostly the same response as our
-first execution of the actor. This time, however, we did not need to query the
-logs for this execution for them to print to screen - that was done
-automatically.</p>
+<p>Check your email for the message.
+Did you get it? Hooray!</p>
 </div>
 
 
@@ -254,8 +210,12 @@ automatically.</p>
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../hello-world-actor/00.containerizeyourcode.html">Create a Custom Actor</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00.containerizeyourcode.html">Create a Custom Actor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello-world-actor/00.buildhelloworld.html">Work with Actors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello-world-actor/00.buildhelloworld.html#hello-world-actor">Hello World Actor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello-world-actor/00.buildhelloworld.html#install-the-cli">Install the CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello-world-actor/00.buildhelloworld.html#initialize-a-tapis-session">Initialize a Tapis Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hello-world-actor/00.buildhelloworld.html#create-a-new-actor">Create a New Actor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upstream-messenger/00.deployupstream.html">Automating Work at TACC Tutorial: Messaging Between Actors</a></li>
 </ul>
 
 <div class="relations">
@@ -295,7 +255,7 @@ automatically.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/email-actor/00.emailactor.rst.txt"
+      <a href="../_sources/email-actor/01.emailactor.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

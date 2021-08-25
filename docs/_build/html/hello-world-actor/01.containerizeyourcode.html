@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Create a Custom Actor &#8212; TACC Summer Institute Tapis Actors  documentation</title>
+    <title>Hello, World Actor &#8212; TACC Summer Institute Tapis Actors  documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -14,8 +14,6 @@
     <script type="text/javascript" src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Create a Custom Actor" href="../email-actor/00.containerizeyourcode.html" />
-    <link rel="prev" title="Welcome to TACC Summer Instittute Tapis Actors’s documentation" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -32,12 +30,71 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="create-a-custom-actor">
-<h1>Create a Custom Actor<a class="headerlink" href="#create-a-custom-actor" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="hello-world-actor">
+<h1>Hello, World Actor<a class="headerlink" href="#hello-world-actor" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="create-a-custom-actor">
+<h2>Create a Custom Actor<a class="headerlink" href="#create-a-custom-actor" title="Permalink to this headline">¶</a></h2>
 <p>This guide will demonstrate how to create a custom actor from scratch.</p>
 <p>In this example, we will build a simple hello-world actor that says “Hello, World!”.</p>
+<p>Before diving in, let’s make sure we have the following resources:</p>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>Before getting started, you need to have the following:</p>
+<ul class="simple">
+<li><p>TACC training account</p></li>
+<li><p>Familiarity with working at the command line</p></li>
+<li><p>Have Docker installed on your laptop:</p></li>
+</ul>
+<ul class="simple">
+<li><p>Install Docker on your laptop:</p>
+<ul>
+<li><p><a class="reference external" href="https://docs.docker.com/docker-for-mac/">Mac</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/docker-for-windows/">Windows</a></p></li>
+<li><p><a class="reference external" href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">Ubuntu</a></p></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="install-the-cli">
+<h2>Install the CLI<a class="headerlink" href="#install-the-cli" title="Permalink to this headline">¶</a></h2>
+<p>The Tapis CLI is available as a Python package. We highly recommend using
+Python 3.7+ as the Python runtime behind the Tapis CLI.</p>
+<div class="section" id="install-with-pip">
+<h3>Install with Pip<a class="headerlink" href="#install-with-pip" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip3 install tapis-cli
+</pre></div>
+</div>
+<p>We’ll know Tapis CLI installed correctly when the <code class="docutils literal notranslate"><span class="pre">tapis</span> <span class="pre">-h</span></code> command returns some information about the application:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ tapis -h
+
+usage: tapis [--version] [-v | -q] [--log-file LOG_FILE] [-h] [--debug]
+
+Tapis CLI: Scripting interface to the Tapis platform. Documentation at
+https://tapis-cli.rtfd.io/. For support contact &quot;TACC Help&quot; &lt;help@tacc.cloud&gt;
+
+optional arguments:
+ --version            show program&#39;s version number and exit
+ -v, --verbose        Increase verbosity of output. Can be repeated.
+ -q, --quiet          Suppress output except warnings and errors.
+ --log-file LOG_FILE  Specify a file to log output. Disabled by default.
+ -h, --help           Show help message and exit.
+ --debug              Show tracebacks on errors.
+
+Commands:
+ actors aliases create  Add an Alias for an Actor
+ actors aliases delete  Delete an Actor Alias
+ actors aliases list  List all Actor Aliases
+ actors aliases show  Show details for an Actor Alias
+ actors aliases update  Update an Alias to resolve to a different Actor
+ actors create  Create an Actor
+ actors delete  Delete an Actor
+ ...
+</pre></div>
+</div>
+</div>
 <div class="section" id="components-of-an-actor">
-<h2>Components of an Actor<a class="headerlink" href="#components-of-an-actor" title="Permalink to this headline">¶</a></h2>
+<h3>Components of an Actor<a class="headerlink" href="#components-of-an-actor" title="Permalink to this headline">¶</a></h3>
 <p>Make a new directory and add the following files:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mkdir hello-world-actor/ <span class="o">&amp;&amp;</span> <span class="nb">cd</span> hello-world-actor/
 
@@ -54,7 +111,7 @@ hello-world-actor/
 </div>
 </div>
 <div class="section" id="write-the-actor-function">
-<h2>Write the Actor Function<a class="headerlink" href="#write-the-actor-function" title="Permalink to this headline">¶</a></h2>
+<h3>Write the Actor Function<a class="headerlink" href="#write-the-actor-function" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">actor.py</span></code> python script is where the code for your main function can
 be found. An example of a functional actor that says “Hello, World!” is:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span> <span class="sd">&quot;&quot;&quot;Say Hello, World or the message received from user input&quot;&quot;&quot;</span>
@@ -85,12 +142,12 @@ interact with other parts of the Tapis platform. Add the above code to your
 <code class="docutils literal notranslate"><span class="pre">actor.py</span></code> file.</p>
 </div>
 <div class="section" id="define-environment-variables">
-<h2>Define Environment Variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">environment.json</span></code> file may contain useful environment variables or
+<h3>Define Environment Variables<a class="headerlink" href="#define-environment-variables" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">secrets.json</span></code> file may contain useful environment variables or
 configurations to pass to the actor at creation time. These variables will be
 part of the “context” taken from the environment, as in the example python
 script above. For the purposes of this example, add the following definition to
-<code class="docutils literal notranslate"><span class="pre">environment.json</span></code>:</p>
+<code class="docutils literal notranslate"><span class="pre">secrets.json</span></code>:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="nt">&quot;foo&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span>
 <span class="p">}</span>
@@ -98,7 +155,7 @@ script above. For the purposes of this example, add the following definition to
 </div>
 </div>
 <div class="section" id="create-a-dockerfile">
-<h2>Create a Dockerfile<a class="headerlink" href="#create-a-dockerfile" title="Permalink to this headline">¶</a></h2>
+<h3>Create a Dockerfile<a class="headerlink" href="#create-a-dockerfile" title="Permalink to this headline">¶</a></h3>
 <p>The only requirements are python and the agavepy python library, which is
 available through
 <a class="reference external" href="https://pypi.org/">PyPi</a>.
@@ -128,7 +185,7 @@ efficiency</p>
 </div>
 </div>
 <div class="section" id="build-and-push-the-dockerfile">
-<h2>Build and Push the Dockerfile<a class="headerlink" href="#build-and-push-the-dockerfile" title="Permalink to this headline">¶</a></h2>
+<h3>Build and Push the Dockerfile<a class="headerlink" href="#build-and-push-the-dockerfile" title="Permalink to this headline">¶</a></h3>
 <p>The Docker image must be pushed to a public repository in order for the actor
 to use it. Use the following Docker commands in your local actor folder to build
 and push to a repository that you have access to:</p>
@@ -146,6 +203,7 @@ The push refers to repository <span class="o">[</span>docker.io/taccuser/word-co
 ...
 <span class="m">1</span>.0: digest: sha256:67cc6f6f00589d9ae83b99d779e4893a25e103d07e4f660c14d9a0ee06a9ddaf size: <span class="m">1995</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -168,24 +226,19 @@ The push refers to repository <span class="o">[</span>docker.io/taccuser/word-co
 
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Create a Custom Actor</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#components-of-an-actor">Components of an Actor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#write-the-actor-function">Write the Actor Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#define-environment-variables">Define Environment Variables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#create-a-dockerfile">Create a Dockerfile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#build-and-push-the-dockerfile">Build and Push the Dockerfile</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../email-actor/00.containerizeyourcode.html">Create a Custom Actor</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="00.buildhelloworld.html">Work with Actors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00.buildhelloworld.html#hello-world-actor">Hello World Actor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00.buildhelloworld.html#install-the-cli">Install the CLI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00.buildhelloworld.html#initialize-a-tapis-session">Initialize a Tapis Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00.buildhelloworld.html#create-a-new-actor">Create a New Actor</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upstream-messenger/00.deployupstream.html">Automating Work at TACC Tutorial: Messaging Between Actors</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to TACC Summer Instittute Tapis Actors’s documentation</a></li>
-      <li>Next: <a href="../email-actor/00.containerizeyourcode.html" title="next chapter">Create a Custom Actor</a></li>
   </ul></li>
 </ul>
 </div>
@@ -219,7 +272,7 @@ The push refers to repository <span class="o">[</span>docker.io/taccuser/word-co
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/hello-world-actor/00.containerizeyourcode.rst.txt"
+      <a href="../_sources/hello-world-actor/01.containerizeyourcode.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

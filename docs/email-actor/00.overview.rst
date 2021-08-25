@@ -1,0 +1,16 @@
+Let's send an Email with Tapis Actors
+=====================================
+
+In this section, we will learn about building a custom actor that sends an email from scratch
+
+**Objectives for this session**
+
+  * To build an Actor that sends an email
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Sections:
+
+   01.containerizeyourcode.rst
+   02.emailactor.rst
