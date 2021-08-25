@@ -17,11 +17,6 @@ platform. For a full reference guide to actors, see the
 `Abaco Documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
 
 
-Hello World Actor
------------------
-
-Let us build our hello-world-actor!
-
 Before diving in, let's make sure we have the following resources:
 
 Prerequisites
@@ -156,6 +151,10 @@ Run ``tapis auth show`` to see the newly created access_token and refresh_token.
    | refresh_token | 6ac717bXXXXXXXXXXXXX91d46ab7ae   |
    +---------------+----------------------------------+
 
+Hello World Actor
+-----------------
+
+Let us build our hello-world-actor!
 
 Create a New Actor
 ------------------
@@ -172,15 +171,15 @@ Create the actor as:
 .. code-block:: bash
 
    $ tapis actors create --repo tacc/hello-world:latest \
-                         -n example-actor \
+                         -n hello-world-actor \
                          -d "Test actor that says Hello, World"
    +----------------+-----------------------------+
    | Field          | Value                       |
    +----------------+-----------------------------+
    | id             | NN5N0kGDvZQpA               |
-   | name           | example-actor               |
+   | name           | hello-world-actor           |
    | owner          | taccuser                    |
-   | image          | tacc/hello-world:latest     |
+   | image          | tacc/hello-world:latest |
    | lastUpdateTime | 2021-07-14T22:25:06.171534  |
    | status         | SUBMITTED                   |
    | cronOn         | False                       |
@@ -198,9 +197,9 @@ queried by:
    $ tapis actors show -v NN5N0kGDvZQpA
    {
     "id": "NN5N0kGDvZQpA",
-    "name": "example-actor",
+    "name": "hello-world-actor",
     "description": "Test actor that says Hello, World",
-    "owner": "sgopal",
+    "owner": "taccuser",
     "image": "tacc/hello-world:latest",
     "createTime": "2021-07-14T22:25:06.171Z",
     "lastUpdateTime": "2021-07-14T22:25:06.171Z",
@@ -236,11 +235,11 @@ messages. Finally, you can list all actors visible to you with:
 .. code-block:: bash
 
    $ tapis actors list
-   +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
-   | id            | name          | owner    | image                       | lastUpdateTime             | status | cronOn|
-   +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
-   | NN5N0kGDvZQpA | example-actor | taccuser | tacc/hello-world:latest     | 2021-07-14T22:25:06.171Z   | READY  | False |
-   +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
+   +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
+   | id            | name              | owner    | image                       | lastUpdateTime             | status | cronOn|
+   +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
+   | NN5N0kGDvZQpA | hello-word-actor  | taccuser | tacc/hello-world:latest     | 2021-07-14T22:25:06.171Z   | READY  | False |
+   +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
 
 
 Submit a Message to the Actor
@@ -347,44 +346,23 @@ to see if it had completed and manually print the logs.
 
 There is also a mode to run actors *synchronously* using ``tapis actors run``,
 meaning the command line stays attached to the process awaiting a response after
-sending a message to the actor. For example:
+sending a message to the actor.
 
-.. code-block:: bash
+Delete and Update an Actor
+--------------------------
 
-   $ tapis actors run -m "$MESSAGE" NN5N0kGDvZQpA
-   FULL CONTEXT:
-   {
-     "username": "taccuser",
-     "HOSTNAME": "33d4dd334ef9",
-     "_abaco_worker_id": "X5xGkZ0lol0D3",
-     "raw_message": "{\"key1\":\"value1\", \"key2\":\"value2\"}",
-     "actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
-     "_abaco_container_repo": "taccuser/hello-world:1.0",
-     "content_type": null,
-     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-     "MSG": "Hello, World!",
-     "HOME": "/",
-     "_abaco_actor_state": "{}",
-     "_abaco_actor_name": "example-actor",
-     "_abaco_Content_Type": "str",
-     "execution_id": "jP3RExQW108wM",
-     "_abaco_synchronous": "True",
-     "_abaco_access_token": "de6d11bdbb5a16bdd85beec692b1b283",
-     "_abaco_api_server": "https://api.tacc.utexas.edu",
-     "_abaco_actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
-     "_abaco_jwt_header_name": "X-Jwt-Assertion-Tacc-Prod",
-     "_abaco_actor_id": "NN5N0kGDvZQpA",
-     "_abaco_execution_id": "jP3RExQW108wM",
-     "state": "{}",
-     "_abaco_username": "taccuser",
-     "actor_id": "NN5N0kGDvZQpA"
-   }
-   ...
+Actors can be deleted with the following:
 
-The output above is truncated because it is mostly the same response as our
-first execution of the actor. This time, however, we did not need to query the
-logs for this execution for them to print to screen - that was done
-automatically.
+$ tapis actors delete NN5N0kGDvZQpA
++----------+-------------------+
+| Field    | Value             |
++----------+-------------------+
+| deleted  | ['NN5N0kGDvZQpA'] |
+| messages | []                |
++----------+-------------------+
 
 
-If you have any additional questions or are having issues, please post it in our Slack channel
+This will delete the actor and any associated executions.
+Actors can also be updated with the ``tapis actors update`` command to make changes once created. 
+
+Need help?  Ask your questions using the [TACC-Learn Slack Channel](https://join.slack.com/t/tacc-learn/shared_invite/zt-g1bhp7z4-fi2oQEVXMoH2K6yrvPS4_Q) on #2021_crt_tapis channel.
