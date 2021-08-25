@@ -1,0 +1,3 @@
+agavepy
+requests
+simplejson
