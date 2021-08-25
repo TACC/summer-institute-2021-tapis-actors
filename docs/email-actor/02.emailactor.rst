@@ -96,7 +96,7 @@ messages. Finally, you can list all actors visible to you with:
 
 
 Submit a Message to the Actor
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Next, let's craft a simple message to send to the reactor. Messages can be plain
 text or in JSON format. When using the python actor libraries as in the example
@@ -173,7 +173,7 @@ execution with:
 
 
 Check the Logs for an Execution
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An execution's logs will contain whatever was printed to STDOUT / STDERR by the
 actor. In our demo actor, we expect the actor to print the message passed to it, and

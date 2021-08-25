@@ -1,5 +1,5 @@
-Work with Actors
-================
+Build Hello World Actor
+=======================
 
 In Tapis, **actors** are container-based functions-as-a-service that follow the
 actor model of concurrent computation. An actor responds to messages it receives
@@ -29,7 +29,6 @@ Prerequisites
 
 Before getting started, you need to have the following:
 
-- TACC training accounts
 - Familiarity with working at the command line
 - Have Docker installed on your laptop:
 
@@ -42,12 +41,13 @@ Before getting started, you need to have the following:
 
 
 Install the CLI
----------------
+~~~~~~~~~~~~~~~~
 
 The Tapis CLI is available as a Python package. We highly recommend using
 Python 3.7+ as the Python runtime behind the Tapis CLI.
 
-*Install with Pip*
+Install with Pip
+~~~~~~~~~~~~~~~~
 
 
 .. code-block:: bash
@@ -86,7 +86,7 @@ We’ll know Tapis CLI installed correctly when the ``tapis -h`` command returns
 
 
 Initialize a Tapis Session
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We will have to initialize a client before we can use Tapis CLI.
 You must set up a Tapis session on each host where you will use the Tapis CLI.
