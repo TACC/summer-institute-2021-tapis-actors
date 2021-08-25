@@ -1,3 +1,0 @@
-agavepy
-requests
-json
