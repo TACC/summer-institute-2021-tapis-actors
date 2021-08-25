@@ -1,11 +1,8 @@
 # pull base image
 FROM python:3.6
 
-# add requirements.txt to docker container
-ADD requirements.txt /requirements.txt
-
-# install requirements.txt
-RUN pip3 install -r /requirements.txt
+# install requirements
+RUN pip3 install agavepy simplejson requests
 
 # add the python script to docker container
 ADD actor.py /actor.py
