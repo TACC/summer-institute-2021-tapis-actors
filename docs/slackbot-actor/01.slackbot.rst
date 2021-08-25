@@ -1,5 +1,5 @@
 Slackbot Actor
---------------
+==============
 
 In this section, let us create an actor that sends a message to a Slack Channel via webhook.
 Customize the channel, apparent username, and of course, the text message. You provide the Slack webhook!
@@ -10,7 +10,6 @@ Build and deploy
 Configure a Slack webhook or request one from your organization.
 Customize secrets.json based on the sample to set options such as name,
 channel whitelist, and apparent username.
-
 
 The Webbook
 -----------
@@ -28,8 +27,6 @@ Our ``secrets.json`` will have the following contents:
     "SLACK_CHANNEL": "#lsc",
     "SLACK_USERNAME": "tapis-actors"
   }
-
-
 
 Write the Actor Function
 ------------------------

@@ -1,5 +1,5 @@
-Hello World Tapis Actor
-=======================
+Hello World Actor
+=================
 
 In this section, we will learn about Tapis Actors, create an Actor that says "Hello, World".
 
@@ -13,4 +13,3 @@ In this section, we will learn about Tapis Actors, create an Actor that says "He
    :caption: Sections:
 
    01.buildhelloworld.rst
-   02.containerizeyourcode.rst

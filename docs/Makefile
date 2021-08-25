@@ -25,3 +25,4 @@ clean:
 
 livehtml:
 	@$(SPHINXAUTOBUILD) -b html $(SPHINXOPTS) "$(SOURCEDIR)" "$(BUILDDIR)/html"
+

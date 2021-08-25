@@ -1,5 +1,5 @@
-Let's send an Email with Tapis Actors
-=====================================
+Send Email with Actors
+======================
 
 In this section, we will learn about building a custom actor that sends an email from scratch
 
