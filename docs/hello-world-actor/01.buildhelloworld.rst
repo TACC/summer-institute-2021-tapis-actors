@@ -40,6 +40,7 @@ The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
 
 .. code-block:: bash
+   :emphasize-lines: 9
 
    $ tapis actors show -v NN5N0kGDvZQpA
    {
@@ -73,7 +74,7 @@ queried by:
       "self": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA"
       }
     }
-
+    ...
 
 Above, you can see the plain text name, description that were passed on the command line. In addition, you can see the
 "status" of the actor is "READY", meaning it is ready to receive and act on
