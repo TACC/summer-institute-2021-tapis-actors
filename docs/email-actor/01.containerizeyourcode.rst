@@ -16,14 +16,14 @@ Make a new directory and add the following files:
 
    $ mkdir email-actor/ && cd email-actor/
 
-   $ touch Dockerfile requirements.txt actor.py
+   $ touch Dockerfile actor.py
 
    $ tree ../email-actor/
    email-actor/
    ├── Dockerfile
    └── actor.py
 
-   0 directories, 3 files
+   0 directories, 2 files
 
 
 Write the Actor Function
@@ -155,3 +155,4 @@ and push to a repository that you have access to:
    The push refers to repository [docker.io/taccuser/word-count]
    ...
    1.0: digest: sha256:67cc6f6f00589d9ae83b99d779e4893a25e103d07e4f660c14d9a0ee06a9ddaf size: 1995
+ 
