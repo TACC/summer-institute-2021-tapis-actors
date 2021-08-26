@@ -13,7 +13,7 @@ def post_slack(text):
 
     payload = {
         'text': text,
-        'channel': "#lsc",
+        'channel': "#2021_crt_tapis",
         'username': "tapis_actors"
     }
 
