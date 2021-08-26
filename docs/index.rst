@@ -3,13 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to TACC Summer Institute Tapis Actors's documentation
-==============================================================
+Automating Work with Tapis Actors
+=================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
+   getting-started/00.gettingstarted.rst
    hello-world-actor/00.overview
    email-actor/00.overview
    slackbot-actor/00.overview
