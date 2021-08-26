@@ -131,7 +131,6 @@ List all the executions for a given actor as:
 Show detailed information for the execution with:
 
 .. code-block:: bash
-   :emphasize-lines: 16
 
    $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
    {
