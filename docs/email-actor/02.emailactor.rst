@@ -3,10 +3,6 @@ In this section, let us create the actor from the Docker container and test it b
 Send Email Message From Actor
 -----------------------------
 
-The function of an actor is exposed as the default command in a Docker
-container. Let us create an actor from an existing Docker container image
-called **tacc/email-actor:latest** available on
-`Docker Hub <https://hub.docker.com/repository/docker/tacc/email-actor>`__.
 The default command for this container emails the message "Hello, World" or
 the message sent to it, which will be captured in the actor logs.
 
@@ -14,29 +10,38 @@ Create the actor as:
 
 .. code-block:: bash
 
-   $ tapis actors create --repo tacc/email-actor:latest \
+   $ tapis actors create --repo taccuser/email-actor:1.0 \
                          -n email-actor \
                          -d "Test actor that emails Hello, World"
-                         -E secrets.json
+                         -e useremail_from=useremail \
+                         -e userpassword=password \
+                         -e useremail_to=useremail_to
+
     +----------------+----------------------------+
     | Field          | Value                      |
     +----------------+----------------------------+
     | id             | w66kex1yD7Ql               |
     | name           | email-actor                |
-    | owner          | sgopal                     |
-    | image          | reshg/email-actor:latest   |
+    | owner          | taccuser                   |
+    | image          | taccuser/email-actor:1.0   |
     | lastUpdateTime | 2021-08-24T14:31:58.248860 |
     | status         | SUBMITTED                  |
     +----------------+----------------------------+
+
+Here, we are using the -e flag to set (optional) environment variables for the actor
+at creation time. These variables will be part of the "context" taken from the environment, as in the example python
+script above. For our example, we will pass our Gmail username and password as environment variables to the actor.
+These environment variables will not be visible to anyone else.
 
 The ``--repo`` flag points to the Docker Hub repo on which this actor is based,
 the ``-n`` flag and ``-d`` flag attach a human-readable name and description to
 the actor.
 
 The resulting actor is assigned an id: ``w66kex1yD7Ql``. The actor id can be
-queried by:
+queried by
 
 .. code-block:: bash
+   :emphasize-lines: 11, 12, 13, 14, 34
 
    $ tapis actors show -v w66kex1yD7Ql
    {
@@ -44,10 +49,14 @@ queried by:
       "name": "email-actor",
       "description": "Actor that emails the message",
       "owner": "taccuser",
-      "image": "tacc/email-actor:latest",
+      "image": "taccuser/email-actor:1.0",
       "createTime": "2021-08-24T14:31:58.248Z",
       "lastUpdateTime": "2021-08-24T14:31:58.248Z",
-      "defaultEnvironment": {},
+      "defaultEnvironment": {
+          "useremail_from": "username_from@gmail.com"
+          "useremail_to": "username_to@gmail.com"
+          "userpassoword": "userpassword"
+      },
       "gid": 862347,
       "hints": [],
       "link": "",
@@ -80,8 +89,7 @@ queried by:
   }
 
 
-
-Above, you can see the plain text name, description that were passed on the command line. In addition, you can see the
+Above, you can see the plain text name, description, environment variables that were passed on the command line. In addition, you can see the
 "status" of the actor is "READY", meaning it is ready to receive and act on
 messages. Finally, you can list all actors visible to you with:
 
@@ -91,12 +99,12 @@ messages. Finally, you can list all actors visible to you with:
    +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
    | id            | name          | owner    | image                       | lastUpdateTime             | status | cronOn|
    +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
-   | w66kex1yD7Ql  | email-actor   | taccuser | tacc/email-actor:latest     | 2021-08-14T22:25:06.171Z   | READY  | False |
+   | w66kex1yD7Ql  | email-actor   | taccuser | taccuser/email-actor:1.0    | 2021-08-14T22:25:06.171Z   | READY  | False |
    +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
 
 
 Submit a Message to the Actor
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Next, let's craft a simple message to send to the reactor. Messages can be plain
 text or in JSON format. When using the python actor libraries as in the example
@@ -109,7 +117,7 @@ above, JSON-formatted messages are made available as python dictionaries.
    $ echo $MESSAGE
    Hello, World
 
-   $ Submit the message to the actor
+   # Submit the message to the actor
    $ tapis actors submit -m "$MESSAGE" w66kex1yD7Ql
    +-------------+---------------+
    |  Field      | Value         |
@@ -118,12 +126,12 @@ above, JSON-formatted messages are made available as python dictionaries.
    | msg         | Hello, World  |
    +-------------+---------------+
 
-The id of the actor (``N4xQ5WM5Np1X0``) was used on the command line to specify
+The id of the actor (``w66kex1yD7Ql``) was used on the command line to specify
 which actor should receive the message. In response, an "execution id"
-(``N4xQ5WM5Np1X0``) is returned. An execution is a specific instance of an actor.
+(``w1plap4NalAWb``) is returned. An execution is a specific instance of an actor.
 List all the executions for a given actor as:
 
-.. code-block::bash
+.. code-block:: bash
 
    $ tapis actors execs list w1plap4NalAWb
    +---------------+----------+
@@ -136,6 +144,7 @@ The above execution has already completed. Show detailed information for the
 execution with:
 
 .. code-block:: bash
+   emphasize-lines: 26
 
    $ tapis actors execs show -v w66kex1yD7Ql w1plap4NalAWb
    {
@@ -173,7 +182,7 @@ execution with:
 
 
 Check the Logs for an Execution
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 An execution's logs will contain whatever was printed to STDOUT / STDERR by the
 actor. In our demo actor, we expect the actor to print the message passed to it, and
@@ -187,4 +196,4 @@ email the message to the recipient email address we mentioned above.
     Message emailed successfully!
 
 Check your email for the message.
-Did you get it? Hooray!
+Did you get it? Your actor just emailed you, Hooray!

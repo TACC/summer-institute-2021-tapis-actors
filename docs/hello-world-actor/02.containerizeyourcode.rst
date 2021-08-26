@@ -1,9 +1,5 @@
-Hello, World Actor
-==================
-
-
 Create a Custom Actor
----------------------
+=====================
 
 This guide will demonstrate how to create a custom actor from scratch.
 
@@ -17,7 +13,6 @@ Prerequisites
 
 Before getting started, you need to have the following:
 
-- TACC training account
 - Familiarity with working at the command line
 - Have Docker installed on your laptop:
 
@@ -44,6 +39,7 @@ Install with Pip
    $ pip3 install tapis-cli
 
 We’ll know Tapis CLI installed correctly when the ``tapis -h`` command returns some information about the application:
+
 
 .. code-block:: bash
 

@@ -1,17 +1,20 @@
 """Post user message to Slack"""
-import requests
-import simplejson as json
 from agavepy.actors import get_context
+import requests
+import os
+import simplejson as json
 
-def post_slack(text, webhook_url, slack_channel, slack_username):
+
+def post_slack(text):
     """Send a message containing text to Slack channel"""
 
+    webhook_url = os.environ.get('SLACK_WEBHOOK')
     print("Actor sending message to Slack: {0}".format(text))
 
     payload = {
         'text': text,
-        'channel': slack_channel,
-        'username': slack_username
+        'channel': "#2021_crt_tapis",
+        'username': "tapis_actors"
     }
 
     try:
@@ -28,10 +31,7 @@ def main():
     """Main entry to grab message context from user input"""
     context = get_context()
     message = context['raw_message']
-    webhook_url = context['SLACK_WEBHOOK']
-    slack_channel = context['SLACK_CHANNEL']
-    slack_username = context['SLACK_USERNAME']
-    post_slack(message, webhook_url, slack_channel, slack_username)
+    post_slack(message)
 
 
 if __name__ == '__main__':

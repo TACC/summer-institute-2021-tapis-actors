@@ -1,168 +1,14 @@
-Work with Actors
-================
+Build Hello World Actor
+=======================
 
-In Tapis, **actors** are container-based functions-as-a-service that follow the
-actor model of concurrent computation. An actor responds to messages it receives
-by changing its state, performing an action, sending out response messages, or
-all of the above.
-
-The function an actor performs is exposed as the default command in a container.
-It is typically quick and requires little processing power - i.e. an app may be
-configured to
-`run FastQC <../advanced-api/create_a_custom_app.html>`__,
-and an actor may trigger a job using that app.
-
-The guide below is a brief introduction to interacting with actors on the Tapis
-platform. For a full reference guide to actors, see the
-`Abaco Documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
-
-
-Hello World Actor
------------------
-
-Let us build our hello-world-actor!
-
-Before diving in, let's make sure we have the following resources:
-
-Prerequisites
--------------
-
-Before getting started, you need to have the following:
-
-- TACC training accounts
-- Familiarity with working at the command line
-- Have Docker installed on your laptop:
-
-
-* Install Docker on your laptop:
-
-  - `Mac <https://docs.docker.com/docker-for-mac/>`_
-  - `Windows <https://docs.docker.com/docker-for-windows/>`_
-  - `Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_
-
-
-Install the CLI
----------------
-
-The Tapis CLI is available as a Python package. We highly recommend using
-Python 3.7+ as the Python runtime behind the Tapis CLI.
-
-*Install with Pip*
-
-
-.. code-block:: bash
-
-   $ pip3 install tapis-cli
-
-
-We’ll know Tapis CLI installed correctly when the ``tapis -h`` command returns some information about the application:
-
-.. code-block:: bash
-
-   $ tapis -h
-
-   usage: tapis [--version] [-v | -q] [--log-file LOG_FILE] [-h] [--debug]
-
-   Tapis CLI: Scripting interface to the Tapis platform. Documentation at
-   https://tapis-cli.rtfd.io/. For support contact "TACC Help" <help@tacc.cloud>
-
-   optional arguments:
-    --version            show program's version number and exit
-    -v, --verbose        Increase verbosity of output. Can be repeated.
-    -q, --quiet          Suppress output except warnings and errors.
-    --log-file LOG_FILE  Specify a file to log output. Disabled by default.
-    -h, --help           Show help message and exit.
-    --debug              Show tracebacks on errors.
-
-   Commands:
-    actors aliases create  Add an Alias for an Actor
-    actors aliases delete  Delete an Actor Alias
-    actors aliases list  List all Actor Aliases
-    actors aliases show  Show details for an Actor Alias
-    actors aliases update  Update an Alias to resolve to a different Actor
-    actors create  Create an Actor
-    actors delete  Delete an Actor
-    ...
-
-
-Initialize a Tapis Session
---------------------------
-
-We will have to initialize a client before we can use Tapis CLI.
-You must set up a Tapis session on each host where you will use the Tapis CLI.
-This is a scripted process implemented by the command :code:`tapis auth init`.
-
-You will be prompted to Enter a tenant name.
-We will be using the tacc.prod tenant, so type that as the tenant name and press enter.
-
-.. code-block:: text
-
-   $ tapis auth init
-
-   +---------------+--------------------------------------+----------------------------------------+
-   |      Name     |             Description              |                  URL                   |
-   +---------------+--------------------------------------+----------------------------------------+
-   |      3dem     |             3dem Tenant              |         https://api.3dem.org/          |
-   |     a2cps     |   Acute to Chronic Pain Signatures   |         https://api.a2cps.org/         |
-   |   agave.prod  |         Agave Public Tenant          |      https://public.agaveapi.co/       |
-   |  araport.org  |               Araport                |        https://api.araport.org/        |
-   |     bridge    |                Bridge                |     https://api.bridge.tacc.cloud/     |
-   |   designsafe  |              DesignSafe              |    https://agave.designsafe-ci.org/    |
-   |  iplantc.org  |         CyVerse Science APIs         |       https://agave.iplantc.org/       |
-   |      irec     |              iReceptor               | https://irec.tenants.prod.tacc.cloud/  |
-   |    portals    |            Portals Tenant            |  https://portals-api.tacc.utexas.edu/  |
-   |      sd2e     |             SD2E Tenant              |         https://api.sd2e.org/          |
-   |      sgci     | Science Gateways Community Institute |        https://sgci.tacc.cloud/        |
-   |   tacc.prod   |                 TACC                 |      https://api.tacc.utexas.edu/      |
-   | vdjserver.org |              VDJ Server              | https://vdj-agave-api.tacc.utexas.edu/ |
-   +---------------+--------------------------------------+----------------------------------------+
-
-   Enter a tenant name [tacc.prod]:
-
-   Container registry access:
-   --------------------------
-   Registry Url [e]:
-   Registry Username [docker_username]:
-   Registry Password:
-   Registry Namespace [docker_namespace]:
-   +--------------------+----------------------------------+
-   | Field              | Value                            |
-   +--------------------+----------------------------------+
-   | tenant_id          | tacc.prod                        |
-   | username           | sgopal                           |
-   | api_key            | $API_KEY                         |
-   | access_token       | $ACCESS_TOKEN                    |
-   | expires_at         | Thu Jul 15 13:11:02 2021         |
-   | verify             | True                             |
-   | registry_url       | e                                |
-   | registry_username  | docker_username                  |
-   | registry_password  |                                  |
-   | registry_namespace | docker_namespace                 |
-   +--------------------|-----------------------------------
-
-Run ``tapis auth show`` to see the newly created access_token and refresh_token.
-
-.. code-block:: bash
-
-   $ tapis auth show
-   +---------------+----------------------------------+
-   | Field         | Value                            |
-   +---------------+----------------------------------+
-   | tenant_id     | sd2e                             |
-   | username      | sgopal                           |
-   | api_key       | 8sXXXYgsfsfswtyySSXXXXXXXcsft    |
-   | access_token  | 11XXXXXXXXXXXXXXXXXXXXXXXXXXXX   |
-   | expires_at    | Wed Aug 25 10:25:09 2021         |
-   | refresh_token | 6ac717bXXXXXXXXXXXXX91d46ab7ae   |
-   +---------------+----------------------------------+
-
+Let us build our hello-world actor!
 
 Create a New Actor
 ------------------
 
 The function of an actor is exposed as the default command in a Docker
 container. Here, we will create an actor from an existing Docker container image
-called **tacc/hello-world:latest** available on
+called **tacc/hello-world:1.0** available on
 `Docker Hub <https://hub.docker.com/repository/docker/tacc/hello-world>`__.
 The default command for this container simply prints the message "Hello, World" or
 the message sent to it, which will be captured in the actor logs.
@@ -171,16 +17,16 @@ Create the actor as:
 
 .. code-block:: bash
 
-   $ tapis actors create --repo tacc/hello-world:latest \
-                         -n example-actor \
+   $ tapis actors create --repo tacc/hello-world:1.0 \
+                         -n hello-world-actor \
                          -d "Test actor that says Hello, World"
    +----------------+-----------------------------+
    | Field          | Value                       |
    +----------------+-----------------------------+
    | id             | NN5N0kGDvZQpA               |
-   | name           | example-actor               |
+   | name           | hello-world-actor           |
    | owner          | taccuser                    |
-   | image          | tacc/hello-world:latest     |
+   | image          | tacc/hello-world:1.0        |
    | lastUpdateTime | 2021-07-14T22:25:06.171534  |
    | status         | SUBMITTED                   |
    | cronOn         | False                       |
@@ -194,14 +40,15 @@ The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
 
 .. code-block:: bash
+   :emphasize-lines: 9
 
    $ tapis actors show -v NN5N0kGDvZQpA
    {
     "id": "NN5N0kGDvZQpA",
-    "name": "example-actor",
+    "name": "hello-world-actor",
     "description": "Test actor that says Hello, World",
-    "owner": "sgopal",
-    "image": "tacc/hello-world:latest",
+    "owner": "taccuser",
+    "image": "tacc/hello-world:1.0",
     "createTime": "2021-07-14T22:25:06.171Z",
     "lastUpdateTime": "2021-07-14T22:25:06.171Z",
     "defaultEnvironment": {},
@@ -227,7 +74,7 @@ queried by:
       "self": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA"
       }
     }
-
+    ...
 
 Above, you can see the plain text name, description that were passed on the command line. In addition, you can see the
 "status" of the actor is "READY", meaning it is ready to receive and act on
@@ -236,11 +83,11 @@ messages. Finally, you can list all actors visible to you with:
 .. code-block:: bash
 
    $ tapis actors list
-   +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
-   | id            | name          | owner    | image                       | lastUpdateTime             | status | cronOn|
-   +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
-   | NN5N0kGDvZQpA | example-actor | taccuser | tacc/hello-world:latest     | 2021-07-14T22:25:06.171Z   | READY  | False |
-   +---------------+---------------+----------+-----------------------------+----------------------------+--------+-------+
+   +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
+   | id            | name              | owner    | image                       | lastUpdateTime             | status | cronOn|
+   +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
+   | NN5N0kGDvZQpA | hello-word-actor  | taccuser | tacc/hello-world:1.0        | 2021-07-14T22:25:06.171Z   | READY  | False |
+   +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
 
 
 Submit a Message to the Actor
@@ -257,7 +104,7 @@ above, JSON-formatted messages are made available as python dictionaries.
    $ echo $MESSAGE
    Hello, World
 
-   $ Submit the message to the actor
+   # Submit the message to the actor
    $ tapis actors submit -m "$MESSAGE" NN5N0kGDvZQpA
    +-------------+---------------+
    |  Field      | Value         |
@@ -271,7 +118,7 @@ which actor should receive the message. In response, an "execution id"
 (``N4xQ5WM5Np1X0``) is returned. An execution is a specific instance of an actor.
 List all the executions for a given actor as:
 
-.. code-block::bash
+.. code-block:: bash
 
    $ tapis actors execs list NN5N0kGDvZQpA
    +---------------+----------+
@@ -280,8 +127,8 @@ List all the executions for a given actor as:
    | N4xQ5WM5Np1X0 | COMPLETE |
    +---------------+----------+
 
-The above execution has already completed. Show detailed information for the
-execution with:
+
+Show detailed information for the execution with:
 
 .. code-block:: bash
 
@@ -319,6 +166,8 @@ execution with:
    }
 
 
+We can see here that the above execution has already completed.
+
 Check the Logs for an Execution
 -------------------------------
 
@@ -347,44 +196,26 @@ to see if it had completed and manually print the logs.
 
 There is also a mode to run actors *synchronously* using ``tapis actors run``,
 meaning the command line stays attached to the process awaiting a response after
-sending a message to the actor. For example:
+sending a message to the actor.
+
+Delete and Update an Actor
+--------------------------
+
+Actors can be deleted with the following:
+
 
 .. code-block:: bash
 
-   $ tapis actors run -m "$MESSAGE" NN5N0kGDvZQpA
-   FULL CONTEXT:
-   {
-     "username": "taccuser",
-     "HOSTNAME": "33d4dd334ef9",
-     "_abaco_worker_id": "X5xGkZ0lol0D3",
-     "raw_message": "{\"key1\":\"value1\", \"key2\":\"value2\"}",
-     "actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
-     "_abaco_container_repo": "taccuser/hello-world:1.0",
-     "content_type": null,
-     "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-     "MSG": "Hello, World!",
-     "HOME": "/",
-     "_abaco_actor_state": "{}",
-     "_abaco_actor_name": "example-actor",
-     "_abaco_Content_Type": "str",
-     "execution_id": "jP3RExQW108wM",
-     "_abaco_synchronous": "True",
-     "_abaco_access_token": "de6d11bdbb5a16bdd85beec692b1b283",
-     "_abaco_api_server": "https://api.tacc.utexas.edu",
-     "_abaco_actor_dbid": "TACC-PROD_boEg3mEvrKO5w",
-     "_abaco_jwt_header_name": "X-Jwt-Assertion-Tacc-Prod",
-     "_abaco_actor_id": "NN5N0kGDvZQpA",
-     "_abaco_execution_id": "jP3RExQW108wM",
-     "state": "{}",
-     "_abaco_username": "taccuser",
-     "actor_id": "NN5N0kGDvZQpA"
-   }
-   ...
-
-The output above is truncated because it is mostly the same response as our
-first execution of the actor. This time, however, we did not need to query the
-logs for this execution for them to print to screen - that was done
-automatically.
+   $ tapis actors delete NN5N0kGDvZQpA
+   +----------+-------------------+
+   | Field    | Value             |
+   +----------+-------------------+
+   | deleted  | ['NN5N0kGDvZQpA'] |
+   | messages | []                |
+   +----------+-------------------+
 
 
-If you have any additional questions or are having issues, please post it in our Slack channel
+This will delete the actor and any associated executions.
+Actors can also be updated with the ``tapis actors update`` command to make changes once created.
+
+Need help?  Ask your questions using the [TACC-Learn Slack Channel] on #2021_crt_tapis channel.

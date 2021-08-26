@@ -1,0 +1,115 @@
+Set Up Your Environment
+=======================
+
+Building, deploying, managing, and using Tapis Actors 
+is comprehensively supported via the Tapis CLI and a 
+local installation of Docker. In this section, we will 
+cover preparation of your working environment. 
+
+Prerequisites
+-------------
+
+You will need the following to work with Tapis Actors:
+
+  #. A TACC account
+  #. A DockerHub account
+  #. A terminal emulator and/or SSH client
+
+Local Development Environment
+------------------------------
+
+Many people develop and use Actors right on their local laptop 
+computer using the Tapis CLI and Docker Desktop
+
+  #. Install Docker: `Mac <https://docs.docker.com/docker-for-mac/>`_ Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_ `Windows <https://docs.docker.com/docker-for-windows/>`_
+  #. Ensure Docker is installed and active: `docker images list`
+  #. Log into DockerHub: ``docker login``
+  #. Install the Tapis CLI: ``pip install tapis-cli``
+  #. Check that the CLI is available: ``tapis -h``
+
+.. note::
+    You can also install the latest Tapis CLI from source, but we recommend using the version available on PyPi.
+
+Configure the Tapis CLI
+***********************
+
+Tapis CLI must be configured to talk to the Tapis APIs and DockerHub. The 
+`auth init` command is an interactive workflow that guides you through that 
+process. 
+
+.. code-block:: bash
+
+   $ tapis auth init --interactive
+
+    Configure Tapis API access:
+    ===========================
+    +---------------+--------------------------------------+----------------------------------------+
+    |      Name     |             Description              |                  URL                   |
+    +---------------+--------------------------------------+----------------------------------------+
+    |      3dem     |             3dem Tenant              |         https://api.3dem.org/          |
+    |     a2cps     |   Acute to Chronic Pain Signatures   |         https://api.a2cps.org/         |
+    |     bridge    |                Bridge                |     https://api.bridge.tacc.cloud/     |
+    |   designsafe  |              DesignSafe              |    https://agave.designsafe-ci.org/    |
+    |  iplantc.org  |         CyVerse Science APIs         |       https://agave.iplantc.org/       |
+    |      irec     |              iReceptor               | https://irec.tenants.prod.tacc.cloud/  |
+    |    portals    |            Portals Tenant            |  https://portals-api.tacc.utexas.edu/  |
+    |      sd2e     |             SD2E Tenant              |         https://api.sd2e.org/          |
+    |      sgci     | Science Gateways Community Institute |        https://sgci.tacc.cloud/        |
+    |   tacc.prod   |                 TACC                 |      https://api.tacc.utexas.edu/      |
+    | vdjserver.org |              VDJ Server              | https://vdj-agave-api.tacc.utexas.edu/ |
+    +---------------+--------------------------------------+----------------------------------------+
+    Enter a tenant name [tacc.prod]: tacc.prod
+    Verify SSL connections [Y/n]: Y
+    tacc.prod username: vaughn
+    tacc.prod password for vaughn: <password>
+
+    Container registry access:
+    --------------------------
+    Registry Url [https://index.docker.io]:
+    Registry Username [mwvaughn]: mwvaughn
+    Registry Password []: <password>
+    Registry Namespace [sd2e]: mwvaughn
+    +--------------------+----------------------------------+
+    | Field              | Value                            |
+    +--------------------+----------------------------------+
+    | tenant_id          | tacc.prod                        |
+    | username           | vaughn                           |
+    | api_key            | k_Mt8PGe_e1T4fSFpnvfSkVOyIQa     |
+    | access_token       | cbbb521f1f4df4ad278d6dbf30168812 |
+    | expires_at         | Wed Aug 25 13:21:00 2021         |
+    | verify             | True                             |
+    | registry_url       | https://index.docker.io          |
+    | registry_username  | mwvaughn                         |
+    | registry_password  | p******d                         |
+    | registry_namespace | mwvaughn                         |
+    +--------------------+----------------------------------+
+
+Now, confirm that Tapis CLI is properly configured by retrieving your 
+user data from the `profiles` service.
+
+.. code-block:: bash
+
+    $ tapis profiles show me
+    +--------------+------------------------+
+    | Field        | Value                  |
+    +--------------+------------------------+
+    | first_name   | Matthew                |
+    | last_name    | Vaughn                 |
+    | email        | vaughn@tacc.utexas.edu |
+    | mobile_phone |                        |
+    | phone        |                        |
+    | username     | vaughn                 |
+    +--------------+------------------------+
+
+Using a VM
+----------
+If your local system does not support the Tapis CLI or Docker, it 
+is possible to use a virtual machine. We have prepared VMs for the 
+class running on the NSF cloud "Jetstream" with Docker and the 
+Tapis CLI pre-installed. Please contact a member of the teaching 
+team if you need one. You will need to configure the CLI and log into 
+DockerHub on your training VM once you have been granted access to it. 
+
+.. note::
+    These virtual machines will be deactiviated and deleted 72 hours after 
+    the tutorial is over.

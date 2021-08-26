@@ -1,0 +1,18 @@
+Introduction to Actors
+======================
+
+In Tapis, **actors** are container-based functions-as-a-service that follow the
+actor model of concurrent computation. An actor responds to messages it receives
+by changing its state, performing an action, sending out response messages, or
+all of the above.
+
+The function an actor performs is exposed as the default command in a container.
+It is typically quick and requires little processing power - i.e. an app may be
+configured to
+`run FastQC <../advanced-api/create_a_custom_app.html>`__,
+and an actor may trigger a job using that app.
+
+The guide below is a brief introduction to interacting with actors on the Tapis
+platform. For a full reference guide to actors, see the
+`Abaco Documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
+
