@@ -130,39 +130,42 @@ List all the executions for a given actor as:
 Show detailed information for the execution with:
 
 .. code-block:: bash
+    :caption: Code block with syntax highlighting and line numbers
+    :linenos:
+    :emphasize-lines: 9,10,34,39,46
 
-   $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
-   {
-      "actorId": "NN5N0kGDvZQpA",
-      "apiServer": "https://api.tacc.utexas.edu",
-      "cpu": 121748743,
-      "exitCode": 0,
-      "finalState": {
-        "Dead": false,
-        "Error": "",
-        "ExitCode": 0,
-        "FinishedAt": "2021-07-14T22:32:45.602Z",
-        "OOMKilled": false,
-        "Paused": false,
-        "Pid": 0,
-        "Restarting": false,
-        "Running": false,
-        "StartedAt": "2021-07-14T22:32:45.223Z",
-        "Status": "exited"
-      },
-      "id": "N4xQ5WM5Np1X0",
-      "io": 176,
-      "messageReceivedTime": "2021-07-14T22:32:37.051Z",
-      "runtime": 1,
-      "startTime": "2021-07-14T22:32:44.752Z",
-      "status": "COMPLETE",
-      "workerId": "JABKl4BeDwXJD",
-      "_links": {
-        "logs": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA/executions/N4xQ5WM5Np1X0/logs",
-        "owner": "https://api.tacc.utexas.edu/profiles/v2/sgopal",
-        "self": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA/executions/N4xQ5WM5Np1X0"
-      }
-   }
+    $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
+    {
+        "actorId": "NN5N0kGDvZQpA",
+        "apiServer": "https://api.tacc.utexas.edu",
+        "cpu": 121748743,
+        "exitCode": 0,
+        "finalState": {
+            "Dead": false,
+            "Error": "",
+            "ExitCode": 0,
+            "FinishedAt": "2021-07-14T22:32:45.602Z",
+            "OOMKilled": false,
+            "Paused": false,
+            "Pid": 0,
+            "Restarting": false,
+            "Running": false,
+            "StartedAt": "2021-07-14T22:32:45.223Z",
+            "Status": "exited"
+        },
+        "id": "N4xQ5WM5Np1X0",
+        "io": 176,
+        "messageReceivedTime": "2021-07-14T22:32:37.051Z",
+        "runtime": 1,
+        "startTime": "2021-07-14T22:32:44.752Z",
+        "status": "COMPLETE",
+        "workerId": "JABKl4BeDwXJD",
+        "_links": {
+            "logs": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA/executions/N4xQ5WM5Np1X0/logs",
+            "owner": "https://api.tacc.utexas.edu/profiles/v2/sgopal",
+            "self": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA/executions/N4xQ5WM5Np1X0"
+        }
+    }
 
 
 We can see here that the above execution has already completed.
