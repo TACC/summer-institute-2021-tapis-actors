@@ -11,8 +11,8 @@ Prerequisites
 
 You will need the following to work with Tapis Actors:
 
-  #. A TACC account
-  #. A DockerHub account
+  #. A `TACC account <https://portal.tacc.utexas.edu/account-request>`_
+  #. A `DockerHub account <https://hub.docker.com/signup>`_
   #. A terminal emulator and/or SSH client
 
 Local Development Environment
@@ -21,20 +21,20 @@ Local Development Environment
 Many people develop and use Actors right on their local laptop 
 computer using the Tapis CLI and Docker Desktop
 
-  #. Install Docker: `Mac <https://docs.docker.com/docker-for-mac/>`_ Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_ `Windows <https://docs.docker.com/docker-for-windows/>`_
-  #. Ensure Docker is installed and active: `docker images list`
+  #. Install Docker: `Mac <https://docs.docker.com/docker-for-mac/>`_ | `Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_ | `Windows <https://docs.docker.com/docker-for-windows/>`_
+  #. Ensure Docker is installed and active: ``docker images list``
   #. Log into DockerHub: ``docker login``
   #. Install the Tapis CLI: ``pip install tapis-cli``
   #. Check that the CLI is available: ``tapis -h``
 
 .. note::
-    You can also install the latest Tapis CLI from source, but we recommend using the version available on PyPi.
+    You can also install the latest Tapis CLI `from source <https://github.com/TACC-Cloud/tapis-cli>`_ but we recommend using the version available on PyPi.
 
 Configure the Tapis CLI
 ***********************
 
 Tapis CLI must be configured to talk to the Tapis APIs and DockerHub. The 
-`auth init` command is an interactive workflow that guides you through that 
+``auth init`` command is an interactive workflow that guides you through that 
 process. 
 
 .. code-block:: bash
@@ -85,7 +85,7 @@ process.
     +--------------------+----------------------------------+
 
 Now, confirm that Tapis CLI is properly configured by retrieving your 
-user data from the `profiles` service.
+user data from the ``tapis profiles`` service.
 
 .. code-block:: bash
 
@@ -105,7 +105,7 @@ Using a VM
 ----------
 If your local system does not support the Tapis CLI or Docker, it 
 is possible to use a virtual machine. We have prepared VMs for the 
-class running on the NSF cloud "Jetstream" with Docker and the 
+class running on the NSF cloud `Jetstream <https://jetstream-cloud.org/>`_ with Docker and the 
 Tapis CLI pre-installed. Please contact a member of the teaching 
 team if you need one. You will need to configure the CLI and log into 
 DockerHub on your training VM once you have been granted access to it. 

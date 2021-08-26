@@ -1,0 +1,28 @@
+What is an Actor?
+=================
+
+For our purposes, an *Actor* is a container-based function-as-a-service deployed 
+on a software platform called Abaco, where it will follow the `actor model` of 
+concurrent computation.
+
+In response to a message it receives, an Actor can
+    - Make local decisions
+    - Create more actors
+    - Send more messages
+    - Determine how to respond to the next message received.
+
+Actors may modify their own private state, but can only affect each 
+other indirectly through messaging. The *actor model* is characterized 
+by concurrency of computation within and among actors, dynamic 
+actor creation, requirement for actor addresses in messages, and 
+interaction only through direct message passing.
+
+In the Tapis Actors implementation, each actor registered in the system is 
+associated with a Docker image. Actor containers are executed in response to 
+messages posted to their inbox, which itself is given by a URI exposed via the 
+system. In the process of executing each actor container state, logs and 
+execution statistics are collected. 
+
+Typically, functions performed by actors are quick and require little processing power. 
+Use cases with more substantial run times or resource requirements are usually 
+best addressed using Tapis Apps. 

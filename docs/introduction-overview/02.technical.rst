@@ -1,0 +1,43 @@
+How Does an Actor Work?
+=======================
+
+The function an actor performs is specified as the **default command** 
+in a Docker container. Code for this function is written based around a 
+handful of core assumptions:
+    #. The *message* is passed via an environment variable ``MSG``
+    #. Supplemental environment variables can be specified when the actor is deployed
+    #. Parameters can be provided alongside the message, which are passed as additional environment variables
+    #. The execution environment is read-only and unpriveleged
+    #. Inbound network connections are disallowed
+    #. Outbound network connections are unrestricted
+    #. The execution environment is destroyed when the function has completed
+    #. ``STDERR`` and ``STDOUT`` are captured by the Abaco platform for later review
+
+Depending on the configuration of your specific Tapis Actors *tenant*, the following 
+additional assumptions may apply. For the ``tacc.prod`` tenant running at TACC, they 
+absolutely do. 
+    #. A Tapis access token is available via an environment variable
+    #. The TACC ``$WORK`` filesystem is mounted and writeable at ``/work``
+    #. Code will run as your TACC-default user and group ID
+
+
+Workflow
+--------
+
+The workflow for bworking with Actors will be covered in detail 
+in this tutorial, but briefly, is as follows:
+
+    - Write code and package into a Docker container
+    - Push the container to a public container registry (DockerHub)
+    - Register an actor to use the container
+    - Send a message to the actor
+    - Verify execution by inspecting the logs
+    - (Optional) Update container or actor
+    - (Optional) Share the actor with other users
+    - (Optional) Delete the actor
+
+Learn More
+----------
+
+For a full reference guide to actors, see the
+`Tapis Actors online documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
