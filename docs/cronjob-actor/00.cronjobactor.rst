@@ -3,8 +3,8 @@ Schedule Execution of an Actor
 
 Abaco’s cron schedule is a tool to automatically execute your actor based on a 
 schedule. Each actor has two user-defined parameters associated with the cron 
-execution: cronSchedule and cronOn. The scheduler has another variable, 
-cronNextEx, which holds the next execution time of the actor. This is an 
+execution: ``cronSchedule`` and ``cronOn``. The scheduler has another variable, 
+``cronNextEx``, which holds the next execution time of the actor. This is an 
 internal variable and cannot be edited by users. To create a schedule, set the 
 cronSchedule parameter when registering a new actor or updating an existing 
 actor. The value of cronSchedule should be a string in the following format:
@@ -19,13 +19,13 @@ Note that the spaces, plus characters (+) and dash characters (-) in the
 template above are meaningful and are a required part of the format. 
 Abaco’s cron schedule also has an alias called now, which lets you execute 
 the actor at the current UTC time. For example, if an actor was registered 
-with this schedule
+with this schedule:
 
 .. code-block:: bash
 
    "cronSchedule": "now + 1 hour"
 
-the actor would execute at the current time, and then again at the 
+The actor would execute at the current time, and then again at the 
 top of the hour every hour.
 The highest granularity is the hour, and the units of time that can be used 
 are hour, day, week, and month. The cron schedule runs on the UTC timezone.
@@ -108,4 +108,5 @@ Currently, the cron message sent to the actor is the static string:
    This is your cron execution
 
 
-
+You cannot change this incoming message, but you can change how the actor 
+responds to it. 
