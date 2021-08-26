@@ -1,5 +1,5 @@
-Setup a CronJob for an Actor
------------------------------
+Schedule Execution of an Actor
+==============================
 
 Abaco’s cron schedule is a tool to automatically execute your actor based on a 
 schedule. Each actor has two user-defined parameters associated with the cron 

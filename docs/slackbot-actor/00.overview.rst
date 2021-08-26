@@ -1,5 +1,5 @@
-Slackbot Actor
-==============
+Send a Slack Message
+====================
 
 In this section, we will learn how to use Webhooks with Actors to send notifications/messages to Slack.
 

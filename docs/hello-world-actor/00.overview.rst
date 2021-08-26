@@ -1,5 +1,5 @@
-Your First Actor: Hello World
-=============================
+Say "Hello World"
+=================
 
 In this section, we create and test an Actor that says "Hello, World".
 

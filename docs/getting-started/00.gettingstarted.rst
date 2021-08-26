@@ -21,10 +21,11 @@ Local Development Environment
 Many people develop and use Actors right on their local laptop 
 computer using the Tapis CLI and Docker Desktop
 
-  #. Ensure Docker is installed and active
-  #. Log into DockerHub: `docker login`
-  #. Install the Tapis CLI: `pip install tapis-cli`
-  #. Check that the CLI is available: `tapis -h`
+  #. Install Docker: `Mac <https://docs.docker.com/docker-for-mac/>`_ Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_ `Windows <https://docs.docker.com/docker-for-windows/>`_
+  #. Ensure Docker is installed and active: `docker images list`
+  #. Log into DockerHub: ``docker login``
+  #. Install the Tapis CLI: ``pip install tapis-cli``
+  #. Check that the CLI is available: ``tapis -h``
 
 .. note::
     You can also install the latest Tapis CLI from source, but we recommend using the version available on PyPi.
@@ -106,7 +107,8 @@ If your local system does not support the Tapis CLI or Docker, it
 is possible to use a virtual machine. We have prepared VMs for the 
 class running on the NSF cloud "Jetstream" with Docker and the 
 Tapis CLI pre-installed. Please contact a member of the teaching 
-team if you need one. 
+team if you need one. You will need to configure the CLI and log into 
+DockerHub on your training VM once you have been granted access to it. 
 
 .. note::
     These virtual machines will be deactiviated and deleted 72 hours after 
