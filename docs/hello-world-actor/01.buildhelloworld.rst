@@ -154,14 +154,14 @@ Run ``tapis auth show`` to see the newly created access_token and refresh_token.
 Hello World Actor
 -----------------
 
-Let us build our hello-world-actor!
+Let us build our hello-world actor!
 
 Create a New Actor
 ------------------
 
 The function of an actor is exposed as the default command in a Docker
 container. Here, we will create an actor from an existing Docker container image
-called **tacc/hello-world:latest** available on
+called **tacc/hello-world:1.0** available on
 `Docker Hub <https://hub.docker.com/repository/docker/tacc/hello-world>`__.
 The default command for this container simply prints the message "Hello, World" or
 the message sent to it, which will be captured in the actor logs.
@@ -170,7 +170,7 @@ Create the actor as:
 
 .. code-block:: bash
 
-   $ tapis actors create --repo tacc/hello-world:latest \
+   $ tapis actors create --repo tacc/hello-world:1.0 \
                          -n hello-world-actor \
                          -d "Test actor that says Hello, World"
    +----------------+-----------------------------+
@@ -179,7 +179,7 @@ Create the actor as:
    | id             | NN5N0kGDvZQpA               |
    | name           | hello-world-actor           |
    | owner          | taccuser                    |
-   | image          | tacc/hello-world:latest |
+   | image          | tacc/hello-world:1.0        |
    | lastUpdateTime | 2021-07-14T22:25:06.171534  |
    | status         | SUBMITTED                   |
    | cronOn         | False                       |
@@ -193,6 +193,7 @@ The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
 
 .. code-block:: bash
+   :emphasize-lines: 11, 19
 
    $ tapis actors show -v NN5N0kGDvZQpA
    {
@@ -200,7 +201,7 @@ queried by:
     "name": "hello-world-actor",
     "description": "Test actor that says Hello, World",
     "owner": "taccuser",
-    "image": "tacc/hello-world:latest",
+    "image": "tacc/hello-world:1.0",
     "createTime": "2021-07-14T22:25:06.171Z",
     "lastUpdateTime": "2021-07-14T22:25:06.171Z",
     "defaultEnvironment": {},
@@ -238,7 +239,7 @@ messages. Finally, you can list all actors visible to you with:
    +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
    | id            | name              | owner    | image                       | lastUpdateTime             | status | cronOn|
    +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
-   | NN5N0kGDvZQpA | hello-word-actor  | taccuser | tacc/hello-world:latest     | 2021-07-14T22:25:06.171Z   | READY  | False |
+   | NN5N0kGDvZQpA | hello-word-actor  | taccuser | tacc/hello-world:1.0        | 2021-07-14T22:25:06.171Z   | READY  | False |
    +---------------+-------------------+----------+-----------------------------+----------------------------+--------+-------+
 
 
@@ -256,7 +257,7 @@ above, JSON-formatted messages are made available as python dictionaries.
    $ echo $MESSAGE
    Hello, World
 
-   $ Submit the message to the actor
+   # Submit the message to the actor
    $ tapis actors submit -m "$MESSAGE" NN5N0kGDvZQpA
    +-------------+---------------+
    |  Field      | Value         |
@@ -279,10 +280,10 @@ List all the executions for a given actor as:
    | N4xQ5WM5Np1X0 | COMPLETE |
    +---------------+----------+
 
-The above execution has already completed. Show detailed information for the
-execution with:
+Show detailed information for the execution with:
 
 .. code-block:: bash
+   emphasize-lines: 16
 
    $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
    {
@@ -317,6 +318,7 @@ execution with:
       }
    }
 
+We can see here that the above execution has already completed.
 
 Check the Logs for an Execution
 -------------------------------

@@ -13,8 +13,8 @@ The Webbook
 -----------
 
 How do we get the webhook into our Actor? We don't. Instead of embedding it in the underlying container, it is defined as an environment variable in
-the Actor. We must set SLACK_WEBHOOK. This can be done using Tapis CLI.
-In the tapis actors create command, we can pass it as an environment variables via the -e flag.
+the Actor. We must set ``SLACK_WEBHOOK`` while creating the actor. This can be done using Tapis CLI.
+In the ``tapis actors create`` command, we can pass it as an environment variables via the -e flag.
 
 
 Write the Actor Function
@@ -92,6 +92,10 @@ available through
    CMD ["python", "/actor.py"]
 
 
+.. note::
+
+   Make sure to replace ``taccuser`` with your Dockerhub username.
+
 Build Docker Container
 ----------------------
 
@@ -116,10 +120,11 @@ Let us build and push our docker image
 
 Create the Actor
 ----------------
+Let us pass the ``SLACK_WEBHOOK`` as an environment variable during the time of actor creation.
 
 .. code-block:: bash
 
-   $ tapis actors create --repo tacc/slackbot-actor:1.0 \
+   $ tapis actors create --repo taccuser/slackbot-actor:1.0 \
                          -n slackbot-actor \
                          -d "Send a message containing text to Slack channel"
                          -e SLACK_WEBHOOK=https://hooks.slack.com/services/XXgwstwt25afaf11XX6352fwg
@@ -129,7 +134,7 @@ Create the Actor
    | Field          | Value                      |
    +----------------+----------------------------+
    | id             | ww15Ex5oLxJ6b              |
-   | name           | email-actor                |
+   | name           | slackbot-actor             |
    | owner          | taccuser                   |
    | image          | taccuser/slackbot-actor:1.0|
    | lastUpdateTime | 2021-08-24T14:31:58.248860 |
@@ -141,6 +146,7 @@ Create the Actor
 .. code-block:: bash
 
    $ tapis actors show -v ww15Ex5oLxJ6b
+   emphasize-lines: 12, 32
 
    {
      "id": "ww15Ex5oLxJ6b",
@@ -221,7 +227,7 @@ Submit a Message to the Actor
    | msg         | Hello, Slack  |
    +-------------+---------------+
 
-   Let us grab the executionId from here to track the progress of the actor.
+Let us grab the executionId from here to track the progress of the actor.
 
 List Executions of Actor
 ------------------------
@@ -236,7 +242,6 @@ List Executions of Actor
       +---------------+----------+
 
 
-Let us grab the executionId from here to track the progress of the actor.
 The above execution has already completed. Show detailed information for the
 execution with:
 
@@ -244,6 +249,8 @@ execution with:
 .. code-block:: bash
 
    $ tapis actors execs show -v ww15Ex5oLxJ6b EjO6yw03GKRmR
+   emphasize-lines: 25
+
    {
       "actorId": "ww15Ex5oLxJ6b",
       "apiServer": "https://api.sd2e.org",
