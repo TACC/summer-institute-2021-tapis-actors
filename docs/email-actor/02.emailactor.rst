@@ -38,7 +38,7 @@ the ``-n`` flag and ``-d`` flag attach a human-readable name and description to
 the actor.
 
 The resulting actor is assigned an id: ``w66kex1yD7Ql``. The actor id can be
-queried by:
+queried by
 
 .. code-block:: bash
    :emphasize-lines: 11, 12, 13, 14, 34
@@ -89,7 +89,6 @@ queried by:
   }
 
 
-
 Above, you can see the plain text name, description, environment variables that were passed on the command line. In addition, you can see the
 "status" of the actor is "READY", meaning it is ready to receive and act on
 messages. Finally, you can list all actors visible to you with:
@@ -132,7 +131,7 @@ which actor should receive the message. In response, an "execution id"
 (``w1plap4NalAWb``) is returned. An execution is a specific instance of an actor.
 List all the executions for a given actor as:
 
-.. code-block::bash
+.. code-block:: bash
 
    $ tapis actors execs list w1plap4NalAWb
    +---------------+----------+
