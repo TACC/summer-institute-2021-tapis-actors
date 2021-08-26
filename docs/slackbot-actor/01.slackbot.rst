@@ -247,9 +247,9 @@ execution with:
 
 
 .. code-block:: bash
+   :emphasize-lines: 25
 
    $ tapis actors execs show -v ww15Ex5oLxJ6b EjO6yw03GKRmR
-   :emphasize-lines: 25
 
    {
       "actorId": "ww15Ex5oLxJ6b",
