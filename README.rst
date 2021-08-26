@@ -15,5 +15,5 @@ Course material at `Read the Docs`_
 .. |docs| image:: https://readthedocs.org/projects/docs/badge/?version=latest
     :alt: Documentation Status
     :scale: 100%
-    :target: https://containers-at-tacc.readthedocs.io/en/latest/?badge=latest
+    :target: https://summer-institute-2021-tapis-actors.readthedocs.io/en/latest/
 
