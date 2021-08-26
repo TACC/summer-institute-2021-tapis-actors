@@ -146,7 +146,6 @@ Let us pass the ``SLACK_WEBHOOK`` as an environment variable during the time of 
 .. code-block:: bash
 
    $ tapis actors show -v ww15Ex5oLxJ6b
-   :emphasize-lines: 12, 32
 
    {
      "id": "ww15Ex5oLxJ6b",

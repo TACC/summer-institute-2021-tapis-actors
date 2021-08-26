@@ -40,7 +40,6 @@ The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
 
 .. code-block:: bash
-   :emphasize-lines: 9
 
    $ tapis actors show -v NN5N0kGDvZQpA
    {
