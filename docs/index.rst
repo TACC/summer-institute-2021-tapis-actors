@@ -10,6 +10,7 @@ Automating Work with Tapis Actors
    :maxdepth: 1
    :caption: Contents:
 
+   introduction-overview/00.introduction
    getting-started/00.gettingstarted.rst
    hello-world-actor/00.overview
    email-actor/00.overview

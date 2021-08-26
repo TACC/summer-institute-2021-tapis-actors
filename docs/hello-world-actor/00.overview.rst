@@ -1,7 +1,7 @@
-Hello World Actor
-=================
+Your First Actor: Hello World
+=============================
 
-In this section, we will learn about Tapis Actors, create an Actor that says "Hello, World".
+In this section, we create and test an Actor that says "Hello, World".
 
 **Objectives for this session**
 

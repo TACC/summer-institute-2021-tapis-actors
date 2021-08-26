@@ -1,5 +1,5 @@
-Getting Started
-===============
+Set Up Your Environment
+=======================
 
 Building, deploying, managing, and using Tapis Actors 
 is comprehensively supported via the Tapis CLI and a 
@@ -15,17 +15,26 @@ You will need the following to work with Tapis Actors:
   #. A DockerHub account
   #. A terminal emulator and/or SSH client
 
-Local Development
-------------------
+Local Development Environment
+------------------------------
 
+Many people develop and use Actors right on their local laptop 
+computer using the Tapis CLI and Docker Desktop
+
+  #. Ensure Docker is installed and active
   #. Log into DockerHub: `docker login`
   #. Install the Tapis CLI: `pip install tapis-cli`
+  #. Check that the CLI is available: `tapis -h`
 
 .. note::
     You can also install the latest Tapis CLI from source, but we recommend using the version available on PyPi.
 
 Configure the Tapis CLI
 ***********************
+
+Tapis CLI must be configured to talk to the Tapis APIs and DockerHub. The 
+`auth init` command is an interactive workflow that guides you through that 
+process. 
 
 .. code-block:: bash
 
@@ -73,6 +82,11 @@ Configure the Tapis CLI
     | registry_password  | p******d                         |
     | registry_namespace | mwvaughn                         |
     +--------------------+----------------------------------+
+
+Now, confirm that Tapis CLI is properly configured by retrieving your 
+user data from the `profiles` service.
+
+.. code-block:: bash
 
     $ tapis profiles show me
     +--------------+------------------------+
