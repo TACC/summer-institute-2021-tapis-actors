@@ -1,18 +1,32 @@
 Introduction to Actors
 ======================
 
-In Tapis, **actors** are container-based functions-as-a-service that follow the
-actor model of concurrent computation. An actor responds to messages it receives
-by changing its state, performing an action, sending out response messages, or
-all of the above.
+The Tapis Actors API lets you deploy code written in any language to 
+implement functions or services. 
 
-The function an actor performs is exposed as the default command in a container.
-It is typically quick and requires little processing power - i.e. an app may be
-configured to
-`run FastQC <../advanced-api/create_a_custom_app.html>`__,
-and an actor may trigger a job using that app.
+Examples include:
+    - Process a file upload
+    - Send an email
+    - Perform ETL on data
+    - Coordinate a workflow
+    - `Your use case here`
 
-The guide below is a brief introduction to interacting with actors on the Tapis
-platform. For a full reference guide to actors, see the
-`Abaco Documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
+Tapis Actors are a form of *serverless computing* like AWS Lambda, 
+Firebase Functions, or OpenFaas, but are tailored to support the 
+needs of research computing. 
 
+Tapis Actors help you:
+    - Avoid lockin
+        - Built as Docker containers
+        - Underlying platform is free and open-source
+    - Deploy any code
+        - Write new function code in any language
+        - Bring in legacy software and binaries
+    - Run at any scale
+        - Automatically scale up when needed
+        - Scale to zero when not
+
+Tapis Actors can run standalone, be composed into complex workflows, 
+or integrated with external third-party platforms. They serve as 
+connecting threads amongst the complex systems in our commercial and 
+research computing ecosystems. 
