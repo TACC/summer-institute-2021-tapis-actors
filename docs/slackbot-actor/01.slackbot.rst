@@ -218,7 +218,7 @@ Submit a Message to the Actor
    $ echo $MESSAGE
    Hello, Slack!
 
-   $ Submit the message to the actor
+   # Submit the message to the actor
    $ tapis actors submit -m "$MESSAGE" ww15Ex5oLxJ6b
    +-------------+---------------+
    |  Field      | Value         |
@@ -249,7 +249,7 @@ execution with:
 .. code-block:: bash
 
    $ tapis actors execs show -v ww15Ex5oLxJ6b EjO6yw03GKRmR
-   emphasize-lines: 25
+   :emphasize-lines: 25
 
    {
       "actorId": "ww15Ex5oLxJ6b",
