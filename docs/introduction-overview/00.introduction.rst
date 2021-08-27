@@ -31,9 +31,75 @@ or integrated with external third-party platforms. They serve as
 connecting threads amongst the complex systems in our commercial and 
 research computing ecosystems. 
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Sections:
+What is an Actor?
+-----------------
 
-   01.actors.rst
-   02.technical.rst
+For our purposes, an *Actor* is a container-based function-as-a-service deployed 
+on a software platform called Abaco, where it will follow the `actor model` of 
+concurrent computation.
+
+In response to a message it receives, an Actor can
+    - Make local decisions
+    - Create more actors
+    - Send more messages
+    - Determine how to respond to the next message received.
+
+Actors may modify their own private state, but can only affect each 
+other indirectly through messaging. The *actor model* is characterized 
+by concurrency of computation within and among actors, dynamic 
+actor creation, requirement for actor addresses in messages, and 
+interaction only through direct message passing.
+
+In the Tapis Actors implementation, each actor registered in the system is 
+associated with a Docker image. Actor containers are executed in response to 
+messages posted to their inbox, which itself is given by a URI exposed via the 
+system. In the process of executing each actor container state, logs and 
+execution statistics are collected. 
+
+Typically, functions performed by actors are quick and require little processing power. 
+Use cases with more substantial run times or resource requirements are usually 
+best addressed using Tapis Apps. 
+
+How Does an Actor Work?
+-----------------------
+
+The function an actor performs is specified as the **default command** 
+in a Docker container. Code for this function is written based around a 
+handful of core assumptions:
+    #. The *message* is passed via an environment variable ``MSG``
+    #. Supplemental environment variables can be specified when the actor is deployed
+    #. Parameters can be provided alongside the message, which are passed as additional environment variables
+    #. The execution environment is read-only and unpriveleged
+    #. Inbound network connections are disallowed
+    #. Outbound network connections are unrestricted
+    #. The execution environment is destroyed when the function has completed
+    #. ``STDERR`` and ``STDOUT`` are captured by the Abaco platform for later review
+
+Depending on the configuration of your specific Tapis Actors *tenant*, the following 
+additional assumptions may apply. For the ``tacc.prod`` tenant running at TACC, they 
+absolutely do. 
+    #. A Tapis access token is available via an environment variable
+    #. The TACC ``$WORK`` filesystem is mounted and writeable at ``/work``
+    #. Code will run as your TACC-default user and group ID
+
+
+Workflow
+********
+
+The workflow for bworking with Actors will be covered in detail 
+in this tutorial, but briefly, is as follows:
+
+    - Write code and package into a Docker container
+    - Push the container to a public container registry (DockerHub)
+    - Register an actor to use the container
+    - Send a message to the actor
+    - Verify execution by inspecting the logs
+    - (Optional) Update container or actor
+    - (Optional) Share the actor with other users
+    - (Optional) Delete the actor
+
+Learn More
+----------
+
+For a full reference guide to actors, see the
+`Tapis Actors online documentation <https://tacc-cloud.readthedocs.io/projects/abaco/en/latest/index.html>`_.
