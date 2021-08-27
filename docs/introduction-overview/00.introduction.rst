@@ -13,6 +13,7 @@ What is the use case?
     - I need to *send an email to my supervisor* when *this analysis detects something interesting*
     - I need to *launch the next stage in workflow* when *the current stage completes successfully* 
     - I need to *generate and email a report* when *the time is 1:00 PM each day*
+    - I need to *compute a value N* when *given an input P*
 
 The Tapis Actors API lets you deploy functions or services that accomplish these (and many other) use cases.
 
