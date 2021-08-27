@@ -1,8 +1,12 @@
 Introduction to Actors
 ======================
 
-The Tapis Actors API lets you deploy code written in any language to 
-implement functions or services.
+Tapis Actors are a form of *serverless computing* like AWS Lambda, 
+Firebase Functions, or OpenFaas, but are tailored to support the 
+needs of research computing.
+
+What is the use case?
+---------------------
 
 **I need X to happen when Y occurs.**
     - I need to *load a JSON file into a database* when *it is uploaded to my $WORK*
@@ -10,15 +14,13 @@ implement functions or services.
     - I need to *launch the next stage in workflow* when *the current stage completes successfully* 
     - I need to *generate and email a report* when *the time is 1:00 PM each day*
 
-Tapis Actors are a form of *serverless computing* like AWS Lambda, 
-Firebase Functions, or OpenFaas, but are tailored to support the 
-needs of research computing. 
+The Tapis Actors API lets you deploy functions or services that accomplish these (and many other) use cases.
 
-Tapis Actors help you:
+Tapis Actors also lets you:
     - Avoid lockin
         - Built as Docker containers
         - Underlying platform is free and open-source
-    - Deploy any code
+    - Deploy **any** code
         - Write new function code in any language
         - Bring in legacy software and binaries
     - Run at any scale
