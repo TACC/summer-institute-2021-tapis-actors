@@ -40,40 +40,42 @@ The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
 
 .. code-block:: bash
+    :linenos:
+    :emphasize-lines: 10, 18
 
-   $ tapis actors show -v NN5N0kGDvZQpA
-   {
-    "id": "NN5N0kGDvZQpA",
-    "name": "hello-world-actor",
-    "description": "Test actor that says Hello, World",
-    "owner": "taccuser",
-    "image": "tacc/hello-world:1.0",
-    "createTime": "2021-07-14T22:25:06.171Z",
-    "lastUpdateTime": "2021-07-14T22:25:06.171Z",
-    "defaultEnvironment": {},
-    "gid": 862347,
-    "hints": [],
-    "link": "",
-    "mounts": [],
-    "privileged": false,
-    "queue": "default",
-    "stateless": true,
-    "status": "READY",
-    "statusMessage": " ",
-    "token": true,
-    "uid": 862347,
-    "useContainerUid": false,
-    "webhook": "",
-    "cronOn": false,
-    "cronSchedule": null,
-    "cronNextEx": null,
-    "_links": {
-      "executions": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA/executions",
-      "owner": "https://api.tacc.utexas.edu/profiles/v2/sgopal",
-      "self": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA"
+    $ tapis actors show -v NN5N0kGDvZQpA
+    {
+      "id": "NN5N0kGDvZQpA",
+      "name": "hello-world-actor",
+      "description": "Test actor that says Hello, World",
+      "owner": "taccuser",
+      "image": "tacc/hello-world:1.0",
+      "createTime": "2021-07-14T22:25:06.171Z",
+      "lastUpdateTime": "2021-07-14T22:25:06.171Z",
+      "defaultEnvironment": {},
+      "gid": 862347,
+      "hints": [],
+      "link": "",
+      "mounts": [],
+      "privileged": false,
+      "queue": "default",
+      "stateless": true,
+      "status": "READY",
+      "statusMessage": " ",
+      "token": true,
+      "uid": 862347,
+      "useContainerUid": false,
+      "webhook": "",
+      "cronOn": false,
+      "cronSchedule": null,
+      "cronNextEx": null,
+      "_links": {
+          "executions": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA/executions",
+          "owner": "https://api.tacc.utexas.edu/profiles/v2/sgopal",
+          "self": "https://api.tacc.utexas.edu/actors/v2/NN5N0kGDvZQpA"
       }
     }
-    ...
+
 
 Above, you can see the plain text name, description that were passed on the command line. In addition, you can see the
 "status" of the actor is "READY", meaning it is ready to receive and act on
@@ -130,9 +132,8 @@ List all the executions for a given actor as:
 Show detailed information for the execution with:
 
 .. code-block:: bash
-    :caption: Code block with syntax highlighting and line numbers
     :linenos:
-    :emphasize-lines: 9,10,34,39,46
+    :emphasize-lines: 25
 
     $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
     {
