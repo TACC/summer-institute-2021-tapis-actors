@@ -77,7 +77,10 @@ be found. An example of a functional actor that emails the message sent to it:
       main()
 
 
+You can cut and paste the code block above into a new file called, e.g., pi.py, or download it from
+the following link:
 
+`https://raw.githubusercontent.com/shwetagopaul92/summer-institute-2021-tapis-actors/master/docs/scripts/email_actor/actor.py <https://raw.githubusercontent.com/shwetagopaul92/summer-institute-2021-tapis-actors/master/docs/scripts/email_actor/actor.py>`_
 
 This code makes use of the **agavepy** python library which we will install in
 the Docker container. The library includes an "actors" object which is useful to
@@ -155,4 +158,3 @@ and push to a repository that you have access to:
    The push refers to repository [docker.io/taccuser/word-count]
    ...
    1.0: digest: sha256:67cc6f6f00589d9ae83b99d779e4893a25e103d07e4f660c14d9a0ee06a9ddaf size: 1995
- 

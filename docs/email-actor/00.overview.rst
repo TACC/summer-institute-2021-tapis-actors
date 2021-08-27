@@ -1,7 +1,7 @@
 Send an Email
 =============
 
-In this section, we will building and use a custom actor that sends an email.
+In this section, we will build and use a custom actor that sends an email.
 
 **Objectives for this session**
 

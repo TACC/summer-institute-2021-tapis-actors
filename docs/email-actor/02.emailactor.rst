@@ -34,10 +34,10 @@ script above. For our example, we will pass our Gmail username and password as e
 These environment variables will not be visible to anyone else.
 
 .. note::
-   Make sure to quote the email and password values. They usually contain 
-   characters such as ``@`` that have specific meaning in the UNIX shell. Quoting 
-   these strings protects them from being interpreted. Failure to do so can cause 
-   your ``create`` command to fail or behave unexpectedly. 
+   Make sure to quote the email and password values. They usually contain
+   characters such as ``@`` that have specific meaning in the UNIX shell. Quoting
+   these strings protects them from being interpreted. Failure to do so can cause
+   your ``create`` command to fail or behave unexpectedly.
 
 The ``--repo`` flag points to the Docker Hub repo on which this actor is based,
 the ``-n`` flag and ``-d`` flag attach a human-readable name and description to
@@ -47,51 +47,53 @@ The resulting actor is assigned an id: ``w66kex1yD7Ql``. The actor id can be
 queried by
 
 .. code-block:: bash
+    :linenos:
+    :emphasize-lines: 10,11,12,13,32
 
-   $ tapis actors show -v w66kex1yD7Ql
-   {
-      "id": "w66kex1yD7Ql",
-      "name": "email-actor",
-      "description": "Actor that emails the message",
-      "owner": "taccuser",
-      "image": "taccuser/email-actor:1.0",
-      "createTime": "2021-08-24T14:31:58.248Z",
-      "lastUpdateTime": "2021-08-24T14:31:58.248Z",
-      "defaultEnvironment": {
-          "useremail_from": "username_from@gmail.com"
-          "useremail_to": "username_to@gmail.com"
-          "userpassoword": "userpassword"
-      },
-      "gid": 862347,
-      "hints": [],
-      "link": "",
-      "mounts": [
-       {
-          "container_path": "/work",
-          "host_path": "/work",
-          "mode": "rw"
-       },
-       {
-        "container_path": "/corral",
-        "host_path": "/corral-repl/projects/SD2E-Community",
-        "mode": "rw"
-       }
-      ],
-      "privileged": false,
-      "queue": "default",
-      "stateless": true,
-      "status": "READY",
-      "statusMessage": " ",
-      "token": true,
-      "uid": 862347,
-      "useContainerUid": false,
-      "webhook": "",
-      "_links": {
-        "executions": "https://api.sd2e.org/actors/v2/w66kex1yD7Ql/executions",
-        "owner": "https://api.sd2e.org/profiles/v2/sgopal",
-        "self": "https://api.sd2e.org/actors/v2/w66kex1yD7Ql"
+    $ tapis actors show -v w66kex1yD7Ql
+    {
+        "id": "w66kex1yD7Ql",
+        "name": "email-actor",
+        "description": "Actor that emails the message",
+        "owner": "taccuser",
+        "image": "taccuser/email-actor:1.0",
+        "createTime": "2021-08-24T14:31:58.248Z",
+        "lastUpdateTime": "2021-08-24T14:31:58.248Z",
+        "defaultEnvironment": {
+              "useremail_from": "username_from@gmail.com"
+              "useremail_to": "username_to@gmail.com"
+              "userpassoword": "userpassword"
+        },
+        "gid": 862347,
+        "hints": [],
+        "link": "",
+        "mounts": [
+         {
+              "container_path": "/work",
+              "host_path": "/work",
+              "mode": "rw"
+         },
+         {
+              "container_path": "/corral",
+              "host_path": "/corral-repl/projects/SD2E-Community",
+              "mode": "rw"
+         }
+        ],
+        "privileged": false,
+        "queue": "default",
+        "stateless": true,
+        "status": "READY",
+        "statusMessage": " ",
+        "token": true,
+        "uid": 862347,
+        "useContainerUid": false,
+        "webhook": "",
+        "_links": {
+              "executions": "https://api.sd2e.org/actors/v2/w66kex1yD7Ql/executions",
+              "owner": "https://api.sd2e.org/profiles/v2/sgopal",
+              "self": "https://api.sd2e.org/actors/v2/w66kex1yD7Ql"
+        }
       }
-  }
 
 
 Above, you can see the plain text name, description, environment variables that were passed on the command line. In addition, you can see the
