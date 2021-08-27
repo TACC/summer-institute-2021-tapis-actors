@@ -30,3 +30,10 @@ Tapis Actors can run standalone, be composed into complex workflows,
 or integrated with external third-party platforms. They serve as 
 connecting threads amongst the complex systems in our commercial and 
 research computing ecosystems. 
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Sections:
+
+   01.actors.rst
+   02.technical.rst
