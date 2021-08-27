@@ -24,7 +24,7 @@ computer using the Tapis CLI and Docker Desktop
   #. Install Docker: `Mac <https://docs.docker.com/docker-for-mac/>`_ | `Ubuntu <https://docs.docker.com/install/linux/docker-ce/ubuntu/>`_ | `Windows <https://docs.docker.com/docker-for-windows/>`_
   #. Ensure Docker is installed and active: ``docker images list``
   #. Log into DockerHub: ``docker login``
-  #. Install the Tapis CLI: ``pip install tapis-cli``
+  #. Install the Tapis CLI: ``pip3 install tapis-cli`` (**Tapis CLI is Python3-only**)
   #. Check that the CLI is available: ``tapis -h``
 
 .. note::
