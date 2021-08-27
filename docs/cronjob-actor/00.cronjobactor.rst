@@ -84,7 +84,7 @@ After a week, the switch can be turned back on, and the actor will resume
 executing on the hour.
 
 Cron Schedule - Error Messages
------------------------------
+------------------------------
 If users supply a value for cronSchedule in an incorrect format, they will 
 receive an error letting them know to check the format. The API also checks 
 that the schedule sent in has not already past. For example, if you pass in the 
@@ -92,7 +92,7 @@ year 1955, you will get an error message saying the cron schedule has already
 passed. The error message will also tell you the current UTC time for reference.
 
 Cron Message and Execution
------------------------------
+--------------------------
 When it is time to execute an actor configured with a cronSchedule, Abaco’s 
 internal cron agent simply queues a message on the actor’s internal message 
 queue, just as if a client had sent a message to the actor using the /messages 

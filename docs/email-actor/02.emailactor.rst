@@ -13,9 +13,9 @@ Create the actor as:
    $ tapis actors create --repo taccuser/email-actor:1.0 \
                          -n email-actor \
                          -d "Test actor that emails Hello, World"
-                         -e useremail_from=useremail \
-                         -e userpassword=password \
-                         -e useremail_to=useremail_to
+                         -e useremail_from='useremail' \
+                         -e userpassword='password' \
+                         -e useremail_to='useremail_to'
 
     +----------------+----------------------------+
     | Field          | Value                      |
@@ -32,6 +32,12 @@ Here, we are using the -e flag to set (optional) environment variables for the a
 at creation time. These variables will be part of the "context" taken from the environment, as in the example python
 script above. For our example, we will pass our Gmail username and password as environment variables to the actor.
 These environment variables will not be visible to anyone else.
+
+.. note::
+   Make sure to quote the email and password values. They usually contain 
+   characters such as ``@`` that have specific meaning in the UNIX shell. Quoting 
+   these strings protects them from being interpreted. Failure to do so can cause 
+   your ``create`` command to fail or behave unexpectedly. 
 
 The ``--repo`` flag points to the Docker Hub repo on which this actor is based,
 the ``-n`` flag and ``-d`` flag attach a human-readable name and description to
