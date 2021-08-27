@@ -145,10 +145,8 @@ Let us pass the ``SLACK_WEBHOOK`` as an environment variable during the time of 
 
 
 .. code-block:: bash
-    :linenos:
-    :emphasize-lines: 10, 11, 31
 
-    $ tapis actors show -v ww15Ex5oLxJ6b
+   $ tapis actors show -v ww15Ex5oLxJ6b
     {
       "id": "ww15Ex5oLxJ6b",
       "name": "slackbot-actor",

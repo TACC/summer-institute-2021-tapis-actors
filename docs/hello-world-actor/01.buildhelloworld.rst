@@ -40,10 +40,8 @@ The resulting actor is assigned an id: ``NN5N0kGDvZQpA``. The actor id can be
 queried by:
 
 .. code-block:: bash
-    :linenos:
-    :emphasize-lines: 10, 18
 
-    $ tapis actors show -v NN5N0kGDvZQpA
+   $ tapis actors show -v NN5N0kGDvZQpA
     {
       "id": "NN5N0kGDvZQpA",
       "name": "hello-world-actor",
@@ -132,10 +130,8 @@ List all the executions for a given actor as:
 Show detailed information for the execution with:
 
 .. code-block:: bash
-    :linenos:
-    :emphasize-lines: 25
 
-    $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
+   $ tapis actors execs show -v NN5N0kGDvZQpA N4xQ5WM5Np1X0
     {
         "actorId": "NN5N0kGDvZQpA",
         "apiServer": "https://api.tacc.utexas.edu",
