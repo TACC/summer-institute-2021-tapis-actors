@@ -48,7 +48,7 @@ queried by
 
 .. code-block:: bash
     :linenos:
-    :emphasize-lines: 10,11,12,13,32
+    :emphasize-lines: 10,11,12,13,33
 
     $ tapis actors show -v w66kex1yD7Ql
     {
