@@ -2,14 +2,13 @@ Introduction to Actors
 ======================
 
 The Tapis Actors API lets you deploy code written in any language to 
-implement functions or services. 
+implement functions or services.
 
-Examples include:
-    - Process a file upload
-    - Send an email
-    - Perform ETL on data
-    - Coordinate a workflow
-    - `Your use case here`
+**I need X to happen when Y occurs.**
+    - I need to *load a JSON file into a database* when *it is uploaded to my $WORK*
+    - I need to *send an email to my supervisor* when *this analysis detects something interesting*
+    - I need to *launch the next stage in workflow* when *the current stage completes successfully* 
+    - I need to *generate and email a report* when *the time is 1:00 PM each day*
 
 Tapis Actors are a form of *serverless computing* like AWS Lambda, 
 Firebase Functions, or OpenFaas, but are tailored to support the 
