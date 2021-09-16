@@ -11,12 +11,10 @@ Automating Work with Tapis Actors
    :caption: Contents:
 
    introduction-overview/00.introduction
-   getting-started/00.gettingstarted.rst
-   hello-world-actor/00.overview
-   email-actor/00.overview
-   slackbot-actor/00.overview
+   getting-started/00.gettingstarted
+   hello-world-actor/01.buildhelloworld
+   slackbot-actor/01.slackbot
    upstream-messenger/00.deployupstream
-   cronjob-actor/00.cronjobactor
 
 Indices and tables
 ==================
