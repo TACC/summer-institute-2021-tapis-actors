@@ -19,12 +19,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'TACC Summer Institute Tapis Actors'
-copyright = '2019, Texas Advanced Computing Center'
+project = 'TACCster Demo: Automating Work at TACC'
+copyright = '2021, Texas Advanced Computing Center'
 author = 'Texas Advanced Computing Center'
 
 # The short X.Y version
-version = ''
+version = '0.1'
 # The full version, including alpha/beta/rc tags
 release = '0.1'
 
@@ -47,8 +47,8 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+# source_suffix = '.rst'
 
 # The master toctree document.
 master_doc = 'index'
@@ -103,7 +103,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ActorsSummerInstitutedoc'
+htmlhelp_basename = 'ActorsTACCsterdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
