@@ -105,14 +105,15 @@ available through
    CMD ["python", "/actor.py"]
 
 
-.. note::
-
-   In the below command, make sure to replace ``taccuser`` with your DockerHub username.
 
 Build Docker Container
 ----------------------
 
-Let us build and push our docker image
+We can now use our Dockerfile to build a custom Docker image:
+
+.. note::
+
+   In the below command, make sure to replace ``taccuser`` with your DockerHub username.
 
 .. code-block:: bash
 

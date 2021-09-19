@@ -7,13 +7,15 @@ Introduction
 While standalone Actors are useful, one can also network multiple Actors
 to generate more complex workflows. Actors have the ability to send
 messages to other Actors, allowing developers to chain together workflow
-steps, each contained in a separate Actor.
+steps, each contained in a separate Actor. Actors can also interact with TACC
+filesystems such as Stockyard (AKA ``/work``) and launch HPC jobs via Tapis Apps.
 
-In this section of the tutorial, we will deploy a simple
-``upstream-messenger`` Actor that sends a message to the
-``example-actor`` that we deployed in the previous section. We will
-demonstrate that the downstream ``example-actor`` runs after it receives
-the message from ``upstream-messenger``.
+In this section of the tutorial, we will demonstrate these capabilities in a realistic example: a basic pipeline for
+validating DNA sequencing data:
+
+.. image:: ../images/20210916_taccster_actors_pipeline.png
+   :width: 600
+   :alt: A basic data pipeline for running FastQC
 
 Create a New Actor Named ``upstream-messenger``
 -----------------------------------------------
@@ -44,14 +46,14 @@ this Actor, let’s use the ``default`` template:
    +-------+---------------------------------------------------------------+
    | stage | message                                                       |
    +-------+---------------------------------------------------------------+
-   | setup | Project path: ./upstream_messenger                            |
+   | setup | Project path: ./upsteam-messenger                            |
    | setup | CookieCutter variable name=upstream-messenger                 |
-   | setup | CookieCutter variable project_slug=upstream_messenger         |
-   | setup | CookieCutter variable docker_namespace=taccuser                   |
+   | setup | CookieCutter variable project_slug=upsteam-messenger         |
+   | setup | CookieCutter variable docker_namespace=taccuser               |
    | setup | CookieCutter variable docker_registry=https://index.docker.io |
-   | clone | Project path: ./upstream_messenger                            |
+   | clone | Project path: ./upsteam-messenger                            |
    +-------+---------------------------------------------------------------+
-   $ cd upstream_messenger
+   $ cd upsteam-messenger
    $ find -L .
    .
    ./requirements.txt
@@ -79,7 +81,7 @@ Edit Actor Source
 -----------------
 
 The Actor we just created doesn’t do much; it just says “hello world,”
-like the ``example-actor`` we deployed previously. Let’s change its
+like the ``hello-world-actor`` we deployed previously. Let’s change its
 behavior so it does something more interesting, like message another
 Actor. We will use the Python API command
 `sendMessage <https://agavepy.readthedocs.io/en/master/docsite/actors/actors.html#sendmessage-send-a-message-to-an-actor-mailbox>`__
@@ -90,27 +92,40 @@ to implement this. Using your favorite text editor, edit the
 
    import os
    from agavepy.actors import get_context, get_client
+   import requests
+
+
+   def download_fastq(out_path) -> None:
+      url = 'https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq'
+      fq_file = requests.get(url, allow_redirects=True)
+      with open(out_path, 'wb') as f:
+         f.write(fq_file.content)
 
 
    def main():
-       """Main entry to grab message context from user input"""
-       context = get_context()
-       m = context['raw_message']
-       print("Actor received message: {}".format(m))
+      """Main entry to grab message context from user input"""
+      context = get_context()
+      m = context['raw_message']
+      print("Actor received message: {}".format(m))
 
-       # Get an active Tapis client
-       client = get_client()
+      # Get an active Tapis client
+      client = get_client()
 
-       # Pull in the downstream Actor ID from the environment
-       downstream_actor_id = context['DOWNSTREAM_ACTOR_ID']
-       # alternatively:
-       # downstream_actor_id = os.environ['DOWNSTREAM_ACTOR_ID']
+      # Pull in the downstream Actor ID from the environment
+      downstream_actor_id = context['DOWNSTREAM_ACTOR_ID']
+      # alternatively:
+      # downstream_actor_id = os.environ['DOWNSTREAM_ACTOR_ID']
 
-       # Using our Tapis client, send a message to the downstream Actor
-       message = 'greetings, example-actor!'
-       print("Sending message '{}' to {}".format(message, downstream_actor_id))
-       response = client.actors.sendMessage(actorId=downstream_actor_id, body={"message": message})
-       print("Successfully triggered execution '{}' on actor '{}'".format(response['executionId'], downstream_actor_id))
+      # Download our fastq file to TACC Stockyard
+      out_path = '/work/06634/eho/my_reads.fastq'
+      download_fastq(out_path)
+
+      # Using our Tapis client, send the message containing file path 
+      # to the downstream Actor
+      message = out_path
+      print("Sending message '{}' to {}".format(message, downstream_actor_id))
+      response = client.actors.sendMessage(actorId=downstream_actor_id, body={"message": message})
+      print("Successfully triggered execution '{}' on actor '{}'".format(response['executionId'], downstream_actor_id))
 
 
    if __name__ == '__main__':
@@ -141,7 +156,7 @@ environment, which we access via ``context['DOWNSTREAM_ACTOR_ID']`` or
 alternatively ``os.environ['DOWNSTREAM_ACTOR_ID']``. To set the
 ``DOWNSTREAM_ACTOR_ID``, we need only define it in the Actor environment
 when we deploy in the next step. The downstream Actor is the
-``example-actor`` we deployed previously, and we can retrieve its ID
+``hello-world-actor`` we deployed previously, and we can retrieve its ID
 using the CLI:
 
 .. code:: bash
@@ -150,7 +165,7 @@ using the CLI:
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
    | id            | name               | owner | image                         | lastUpdateTime           | status | cronOn |
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | example-actor      | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
+   | MqqbarbazBB8x | hello-world-actor  | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
 
 We will need this Actor ID (``MqqbarbazBB8x`` in my case, yours will be
@@ -198,7 +213,7 @@ If deployment was successful, we should now see two available Actors:
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
    | id            | name               | owner | image                             | lastUpdateTime           | status | cronOn |
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | example-actor      | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
+   | MqqbarbazBB8x | hello-world-actor  | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
    | MDfoobar7AOwx | upstream-messenger | eho   | taccuser/upstream-messenger:0.0.1 | 2021-08-24T20:23:07.619Z | READY  | False  |
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
 
@@ -235,15 +250,15 @@ it finishes:
    +-----------+-----------------------------+
    $ tapis actors execs logs MDfoobar7AOwx MDanexec7AOwx
    Actor received message: hello, upstream-messenger!
-   Sending message 'greetings, example-actor!' to MqqbarbazBB8x
+   Sending message 'greetings, hello-world-actor!' to MqqbarbazBB8x
    Successfully triggered execution '5P7foobarrrA6' on actor 'MqqbarbazBB8x'
 
-Check Execution of Downstream ``example-actor``
+Check Execution of Downstream ``hello-world-actor``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The goal of this tutorial was to send a message to
 ``upstream-messenger`` and have it trigger an execution on
-``example-actor``. Let’s check the status of the execution and inspect
+``hello-world-actor``. Let’s check the status of the execution and inspect
 the logs:
 
 .. code:: bash
@@ -260,7 +275,7 @@ the logs:
    +-----------+-----------------------------+
    $ tapis actors execs logs MqqbarbazBB8x 5P7foobarrrA6 
    Logs for execution 5P7foobarrrA6 
-    Actor received message: hello, example-actor!
+    Actor received message: hello, hello-world-actor!
 
 Conclusion
 ~~~~~~~~~~
