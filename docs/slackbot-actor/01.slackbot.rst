@@ -1,24 +1,38 @@
 Slackbot Actor
 ==============
 
-In this section, let us create an actor that sends a message to a Slack Channel via webhook.
-Customize the channel, apparent username, and of course, the text message. You provide the Slack webhook!
+In this section, we will create an actor that sends a message to a Slack Channel 
+using a webhook provided by Slack. A pre-requisite requirement is an active webhook
+for your Slack workspace.
 
-Build and deploy
-----------------
+Writing Customized Actors
+-------------------------
 
-Configure a Slack webhook or request one from your organization.
+Recall that Tapis Actors are essentially bits of code wrapped in lightweight environments called containers. 
+When we deployed the ``hello-world`` Actor in the previous section, we used a pre-built Docker container (``tacc/hello-world:1.0``). 
+However, a more common use case is to write custom code that runs whenever the Actor executes. To do this, we must first build a
+Docker image using our custom ``actor.py``, push the Docker image to a public image registry (DockerHub), and instruct Tapis to
+use our custom image when executing the container. 
 
-The Webbook
------------
+If you are interested in learning more about Docker containers, please attend our deep dive Docker container session 
+tomorrow (Friday Sept. 24th), where we
+will cover custom image creation, common use cases, and more. The documentation
+for this session can be found `here <https://containers-at-tacc.readthedocs.io/en/latest/>`_ .
 
-How do we get the webhook into our Actor? We don't. Instead of embedding it in the underlying container, it is defined as an environment variable in
-the Actor. We must set ``SLACK_WEBHOOK`` while creating the actor. This can be done using Tapis CLI.
-In the ``tapis actors create`` command, we can pass it as an environment variables via the -e flag.
+Initialize a New Actor ``slackbot-actor``
+-----------------------------------------
 
+.. code-block:: bash
 
-Write the Actor Function
-------------------------
+   $ mkdir slackbot_actor
+   $ cd slackbot_actor
+   $ find -L .
+   .
+   ./Dockerfile
+   ./actor.py  $ touch Dockerfile actor.py
+
+Edit the Actor Source Code in ``actor.py``
+------------------------------------------
 
 An example of a functional actor that says sends a slack message is:
 
@@ -39,18 +53,11 @@ An example of a functional actor that says sends a slack message is:
       webhook_url = os.environ.get('SLACK_WEBHOOK')
       print("Actor sending message to Slack: {0}".format(message))
 
-      payload = {
-          'text': message,
-          'channel': "#2021_crt_tapis",
-          'username': "tapis_actors"
-      }
-
-      try:
-         requests.post(webhook_url, data=json.dumps(payload), 
-                       headers={"Content-type": "application/json"})
-      except Exception as ex:
-         print("Exception occured", ex)
-         raise
+      response_from_slack = requests.post(
+         webhook_url, data=json.dumps({'text': message}), 
+         headers={"Content-type": "application/json"})
+      print("Response from Slack:")
+      print(response_from_slack)
 
 
    def main():
@@ -60,30 +67,21 @@ An example of a functional actor that says sends a slack message is:
       post_to_slack(message)
 
 
-  if __name__ == '__main__':
+   if __name__ == '__main__':
       main()
 
 Here inject the necessary environment variable ``SLACK_WEBHOOK`` set from ``tapis actors create`` command.
-The ``agavepy`` library includes an "actors" object which is useful to grab the message and other context from the environment.
-
-Writing Customized Actors
---------------------
-
-Recall that Tapis Actors are essentially bits of code wrapped in lightweight environments called containers. 
-When we deployed the ``hello-world`` Actor in the previous section, we used a pre-built Docker container (``tacc/hello-world:1.0``). 
-However, a more common use case is to write custom code that runs whenever the Actor executes. To do this, we must first build a
-Docker image using our custom ``actor.py``, push the Docker image to a public image registry (DockerHub), and instruct Tapis to
-use our custom image when executing the container. 
-
-If you are interested in learning more about Docker containers, please attend our deep dive Docker container session tomorrow (Friday Sept. 24th), where we
-will cover custom image creation, common use cases, and more.
-
+How do we get the webhook into our Actor? We don't. Instead of embedding it in the underlying container, it is defined as an environment variable in
+the Actor. We must set ``SLACK_WEBHOOK`` while creating the actor. This can be done using Tapis CLI.
+In the ``tapis actors create`` command, we can pass it as an environment variables via the -e flag.
 
 Write the Dockerfile
 --------------------
 
-The first step to building our customized Actor is to build a customized Docker image. To do this, we write a Dockerfile, which is 
-a list of instructions for building our customized environment. The below Dockerfile constructs an image containing a Python3 runtime
+The first step to building our customized Actor is to build a customized Docker image. 
+To do this, we write a Dockerfile, which is 
+a list of instructions for building our customized environment. 
+The below Dockerfile constructs an image containing a Python3 runtime
 environment, Python package dependencies installed by pip, and our ``actor.py`` script. 
 The pip-installed requirements are agavepy, requests
 simplejson python libraries, which are
@@ -103,7 +101,6 @@ available through
 
    # command to run the python script
    CMD ["python", "/actor.py"]
-
 
 
 Build Docker Container
@@ -161,11 +158,33 @@ We pass the ``SLACK_WEBHOOK`` as an environment variable during the time of acto
 .. code-block:: bash
 
    $ tapis actors show ww15Ex5oLxJ6b
-    {}
+   +-----------------+-------------------------------------------------+
+   | Field           | Value                                           |
+   +-----------------+-------------------------------------------------+
+   | id              | ww15Ex5oLxJ6b                                   |
+   | name            | slackbot-actor                                  |
+   | description     | Send a message containing text to Slack channel |
+   | owner           | taccuser                                        |
+   | image           | taccuser/slackbot-actor:1.1                     |
+   | createTime      | 2021-09-21T20:27:05.613Z                        |
+   | lastUpdateTime  | 2021-09-21T20:27:05.613Z                        |
+   | gid             | 859336                                          |
+   | link            |                                                 |
+   | privileged      | False                                           |
+   | queue           | default                                         |
+   | stateless       | True                                            |
+   | status          | READY                                           |
+   | statusMessage   |                                                 |
+   | token           | True                                            |
+   | uid             | 859336                                          |
+   | useContainerUid | False                                           |
+   | webhook         |                                                 |
+   | cronOn          | False                                           |
+   | cronSchedule    | None                                            |
+   +-----------------+-------------------------------------------------+
 
 
-Above, you can see the plain text name, description, defaultEnvironment that were passed on the command line.
-In addition, you can see the "status" of the actor is "READY", meaning it is ready to receive and act on
+we can see the "status" of the actor is "READY", meaning it is ready to receive and act on
 messages.
 
 Finally, you can list all actors visible to you with:
@@ -186,13 +205,8 @@ Submit a Message to the Actor
 
 .. code-block:: bash
 
-   # Write a message
-   $ export MESSAGE='Hello, Slack!'
-   $ echo $MESSAGE
-   Hello, Slack!
-
    # Submit the message to the actor
-   $ tapis actors submit -m "$MESSAGE" ww15Ex5oLxJ6b
+   $ tapis actors submit -m "Hello, Slack!" ww15Ex5oLxJ6b
    +-------------+---------------+
    |  Field      | Value         |
    +-------------+---------------+
@@ -221,39 +235,16 @@ execution with:
 
 .. code-block:: bash
 
-   $ tapis actors execs show -v ww15Ex5oLxJ6b EjO6yw03GKRmR
-
-   {
-      "actorId": "ww15Ex5oLxJ6b",
-      "apiServer": "https://api.sd2e.org",
-      "cpu": 117091281,
-      "exitCode": 1,
-      "finalState": {
-          "Dead": false,
-          "Error": "",
-          "ExitCode": 1,
-          "FinishedAt": "2021-08-25T14:10:19.308Z",
-          "OOMKilled": false,
-          "Paused": false,
-          "Pid": 0,
-          "Restarting": false,
-          "Running": false,
-          "StartedAt": "2021-08-25T14:10:18.918Z",
-          "Status": "exited"
-       },
-       "id": "EjO6yw03GKRmR",
-       "io": 90,
-       "messageReceivedTime": "2021-08-25T14:10:17.491Z",
-       "runtime": 1,
-       "startTime": "2021-08-25T14:10:18.436Z",
-       "status": "COMPLETE",
-       "workerId": "ww1zAwBG5R7MQ",
-       "_links": {
-          "logs": "https://api.sd2e.org/actors/v2/ww15Ex5oLxJ6b/executions/EjO6yw03GKRmR/logs",
-          "owner": "https://api.sd2e.org/profiles/v2/sgopal",
-          "self": "https://api.sd2e.org/actors/v2/ww15Ex5oLxJ6b/executions/EjO6yw03GKRmR"
-       }
-   }
+   $ tapis actors execs show ww15Ex5oLxJ6b EjO6yw03GKRmR
+   +-----------+-----------------------------+
+   | Field     | Value                       |
+   +-----------+-----------------------------+
+   | actorId   | ww15Ex5oLxJ6b               |
+   | apiServer | https://api.tacc.utexas.edu |
+   | id        | EjO6yw03GKRmR               |
+   | status    | COMPLETE                    |
+   | workerId  | EbQByMAXeMVPa               |
+   +-----------+-----------------------------+
 
 
 Check the Logs for an Execution
