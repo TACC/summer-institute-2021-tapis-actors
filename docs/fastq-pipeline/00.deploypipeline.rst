@@ -1,92 +1,42 @@
-Send a Message Between Actors
+Deploying a Sequencing Pipeline
 =============================
 
 Introduction
 ------------
 
-While standalone Actors are useful, one can also network multiple Actors
-to generate more complex workflows. Actors have the ability to send
-messages to other Actors, allowing developers to chain together workflow
-steps, each contained in a separate Actor. Actors can also interact with TACC
-filesystems such as Stockyard (AKA ``/work``) and launch HPC jobs via Tapis Apps.
+Thus far, we have demonstrated several useful features of actors:
 
-In this section of the tutorial, we will demonstrate these capabilities in a realistic example: a basic pipeline for
-validating DNA sequencing data:
+* Deployment, execution, and handling using Tapis CLI
+* Logging to 3rd party services (Slack in our example)
+* Inter-Actor messaging
+
+In this section of the tutorial, we will demonstrate this toolbox in a realistic example: a basic pipeline for
+validating DNA sequencing data.
 
 .. image:: ../images/20210916_taccster_actors_pipeline.png
    :width: 600
    :alt: A basic data pipeline for running FastQC
 
-Create a New Actor Named ``upstream-messenger``
------------------------------------------------
+We will leverage a few additional Actor capabilities beyond what we have covered previously:
 
-First, let’s write the code that our new Actor will run on execution.
-Instead of manually writing these files, we can simply adapt one of the
-provided Actor templates. To view all available Actor templates, issue:
+* Actors can access TACC's Stockyard (AKA ``/work``) filesystem
+* Actors can submit HPC jobs, by submitting to Tapis Applications
 
-.. code:: bash
+Reusing as much of our previous work as possible, pipeline deployment will consist of the following steps:
 
-   $ tapis actors init -L
-   +--------------------+--------------------+------------------------------------------------------------+----------+
-   | id                 | name               | description                                                | level    |
-   +--------------------+--------------------+------------------------------------------------------------+----------+
-   | default            | Default            | Basic code and configuration skeleton                      | beginner |
-   | echo               | Echo               | Echo message                                               | beginner |
-   | hello_world        | Hello World        | Say Hello, World!                                          | beginner |
-   | sd2e_base          | sd2e_base          | Default reactor context for docker://sd2e/reactors:python3 | beginner |
-   | tacc_reactors_base | tacc_reactors_base | Default actor context for docker://sd2e/reactors:python3   | beginner |
-   +--------------------+--------------------+------------------------------------------------------------+----------+
+* Change ``upstream-messenger`` so it downloads a fastq data file from the web to TACC Stockyard filesystem
+* Re-deploy ``upstream-messenger`` so it sends the path to data file to the ``fastqc-launcher``
+* Deploy new actor ``fastqc-launcher``
+* Deploy a Tapis App ``eho-fastqc-0.11.9`` that runs the `FastQC tool <https://github.com/sequana/fastqc>`_ as HPC job
 
-Each template is a project directory for a different type of Actor. For
-this Actor, let’s use the ``default`` template:
-
-.. code:: bash
-
-   $ tapis actors init --template default --actor-name upstream-messenger
-   +-------+---------------------------------------------------------------+
-   | stage | message                                                       |
-   +-------+---------------------------------------------------------------+
-   | setup | Project path: ./upsteam-messenger                            |
-   | setup | CookieCutter variable name=upstream-messenger                 |
-   | setup | CookieCutter variable project_slug=upsteam-messenger         |
-   | setup | CookieCutter variable docker_namespace=taccuser               |
-   | setup | CookieCutter variable docker_registry=https://index.docker.io |
-   | clone | Project path: ./upsteam-messenger                            |
-   +-------+---------------------------------------------------------------+
-   $ cd upsteam-messenger
-   $ find -L .
-   .
-   ./requirements.txt
-   ./Dockerfile
-   ./project.ini
-   ./message.jsonschema
-   ./default.py
-   ./.gitignore
-   ./secrets.jsonsample
-   ./config.yml
-
-We see that the ``tapis actors init`` command has initialized an Actor
-project directory for us, and it already contains many files that we
-could have written by hand such as the ``Dockerfile`` or the Python
-source code in ``default.py``.
-
-The only file that was not provided by the template is ``secrets.json``.
-Let’s make an empty one now:
-
-.. code:: bash
-
-   echo '{}' > secrets.json
+Since deploying Tapis Apps is outside the scope of this tutorial, I have already completed the final step. 
+If you are interested in learning how to deploy Tapis Applications, I encourage you to consult
+one of our `in-depth Tapis tutorials <https://tacc-cloud.github.io/summer-institute-2021-tapis/>`_ .
 
 Edit ``upstream-messenger`` Source
 ----------------------------------
 
-The Actor we just created doesn’t do much; it just says “hello world,”
-like the ``hello-world-actor`` we deployed previously. Let’s change its
-behavior so it does something more interesting, like message another
-Actor. We will use the Python API command
-`sendMessage <https://agavepy.readthedocs.io/en/master/docsite/actors/actors.html#sendmessage-send-a-message-to-an-actor-mailbox>`__
-to implement this. Using your favorite text editor, edit the
-``default.py`` script so it looks like:
+Using your favorite text editor, edit the ``default.py`` for ``upstream-messener`` so it looks like:
 
 .. code:: python
 
@@ -96,6 +46,7 @@ to implement this. Using your favorite text editor, edit the
 
 
    def download_fastq(out_path) -> None:
+      """Download a demo fastq file from the web to path `out_path`."""
       url = 'https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq'
       fq_file = requests.get(url, allow_redirects=True)
       with open(out_path, 'wb') as f:
@@ -103,7 +54,7 @@ to implement this. Using your favorite text editor, edit the
 
 
    def main():
-      """Main entry to grab message context from user input"""
+      """Main entrypoint"""
       context = get_context()
       m = context['raw_message']
       print("Actor received message: {}".format(m))
@@ -131,49 +82,6 @@ to implement this. Using your favorite text editor, edit the
    if __name__ == '__main__':
        main()
 
-All we’ve done is add a block of code that calls the Tapis/Agave API so
-that it sends a message to another Actor. Notice that we are mimicking
-the CLI workflow from before:
-
-+-----------------------+----------------------+------------------------------+
-| Action                | CLI                  | Python API                   |
-+=======================+======================+==============================+
-|| Get an authenticated || tapis auth init     || client = get_client()       |
-|| Tapis client         ||                     ||                             |
-+-----------------------+----------------------+------------------------------+
-|| Using the client,    || tapis actors submit || client.actors.sendMessage() |
-|| send message to an   ||                     ||                             |
-|| Actor                ||                     ||                             |
-+-----------------------+----------------------+------------------------------+
-|| Using the client,    || tapis jobs submit   || client.jobs.submit()        |
-|| submit HPC job to    ||                     ||                             |
-|| Tapis Application    ||                     ||                             |
-+-----------------------+----------------------+------------------------------+
-
-In fact, the CLI is making the same calls to the Python API under the
-hood!
-
-Notice that we haven’t actually defined **which** Actor ID we want to
-send the message to. Per best practice, we’ve chosen not to “hard code”
-the Actor ID into ``default.py``, but rather read it from the Actor
-environment, which we access via ``context['DOWNSTREAM_ACTOR_ID']`` or
-alternatively ``os.environ['DOWNSTREAM_ACTOR_ID']``. To set the
-``DOWNSTREAM_ACTOR_ID``, we need only define it in the Actor environment
-when we deploy in the next step. The downstream Actor is the
-``hello-world-actor`` we deployed previously, and we can retrieve its ID
-using the CLI:
-
-.. code:: bash
-
-   $ tapis actors list
-   +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
-   | id            | name               | owner | image                         | lastUpdateTime           | status | cronOn |
-   +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | hello-world-actor  | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
-   +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
-
-We will need this Actor ID (``MqqbarbazBB8x`` in my case, yours will be
-different) when we deploy in the next section.
 
 Deploy Another Actor ``fastqc-launcher``
 ----------------------------------------
@@ -236,24 +144,16 @@ We also edit the Actor source code in ``default.py`` so it resembles:
        main()
 
 
-Deploy Actor ``upstream-messenger``
------------------------------------
+Re-deploy Actor ``upstream-messenger``
+--------------------------------------
 
-Our new ``upstream-messenger`` Actor is now ready to deploy. Just like
-before, we want to:
-
-1. Build the Docker image
-2. Push the Docker image
-3. Register the Docker image as a new Actor
-
-Remember to replace the ``DOWNSTREAM_ACTOR_ID`` with the appropriate
-Actor ID from above, and the placeholder ``taccuser`` with your
-DockerHub username.
+Our Actor ``upstream-messenger`` is still configured to send messages to ``hello-world-actor``. 
+We would instead like it to send messages to our new actor ``fastqc-launcher``, so we must
+re-deploy it with a new ``DOWNSTREAM_ACTOR_ID``:
 
 .. code:: bash
 
-   $ docker build -t taccuser/upstream-messenger:0.0.1 .
-   $ docker push taccuser/upstream-messenger:0.0.1
+   # TODO
    $ tapis actors create --repo taccuser/upstream-messenger:0.0.1 \
                          -n upstream-messenger \
                          -d "Sends message to another actor" \
@@ -270,17 +170,6 @@ DockerHub username.
    | cronOn         | False                             |
    +----------------+-----------------------------------+
 
-If deployment was successful, we should now see two available Actors:
-
-.. code:: bash
-
-   $ tapis actors list
-   +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
-   | id            | name               | owner | image                             | lastUpdateTime           | status | cronOn |
-   +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | hello-world-actor  | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
-   | MDfoobar7AOwx | upstream-messenger | eho   | taccuser/upstream-messenger:0.0.1 | 2021-08-24T20:23:07.619Z | READY  | False  |
-   +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
 
 Send Message to ``upstream-messenger`` Using CLI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

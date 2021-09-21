@@ -93,43 +93,48 @@ to implement this. Using your favorite text editor, edit the
 
 
    def main():
-       """Main entry to grab message context from user input"""
-       context = get_context()
-       m = context['raw_message']
-       print("Actor received message: {}".format(m))
+      """Main entrypoint"""
+      context = get_context()
+      m = context['raw_message']
+      print("Actor received message: {}".format(m))
 
-       # Get an active Tapis client
-       client = get_client()
+      # Get an active Tapis client
+      client = get_client()
 
-       # Pull in the downstream Actor ID from the environment
-       downstream_actor_id = context['DOWNSTREAM_ACTOR_ID']
-       # alternatively:
-       # downstream_actor_id = os.environ['DOWNSTREAM_ACTOR_ID']
+      # Pull in the downstream Actor ID from the environment
+      downstream_actor_id = context['DOWNSTREAM_ACTOR_ID']
+      # alternatively:
+      # downstream_actor_id = os.environ['DOWNSTREAM_ACTOR_ID']
 
-       # Using our Tapis client, send a message to the downstream Actor
-       message = 'greetings, hello-world-actor!'
-       print("Sending message '{}' to {}".format(message, downstream_actor_id))
-       response = client.actors.sendMessage(actorId=downstream_actor_id, body={"message": message})
-       print("Successfully triggered execution '{}' on actor '{}'".format(response['executionId'], downstream_actor_id))
+      # Using our Tapis client, send a message to the downstream Actor
+      message = 'greetings, hello-world-actor!'
+      print("Sending message '{}' to {}".format(message, downstream_actor_id))
+      response = client.actors.sendMessage(actorId=downstream_actor_id, body={"message": message})
+      print("Successfully triggered execution '{}' on actor '{}'".format(response['executionId'], downstream_actor_id))
 
 
    if __name__ == '__main__':
-       main()
+      main()
 
 All we’ve done is add a block of code that calls the Tapis/Agave API so
 that it sends a message to another Actor. Notice that we are mimicking
 the CLI workflow from before:
 
-+----------------------+----------------------+-----------------------------+
-| Action               | CLI                  | Python API                  |
-+======================+======================+=============================+
-| Get an authenticated | tapis auth init      | client = get_client()       |
-| Tapis client         |                      |                             |
-+----------------------+----------------------+-----------------------------+
-| Using the client,    | tapis actors submit  | client.actors.sendMessage() |
-| send message to an   |                      |                             |
-| Actor                |                      |                             |
-+----------------------+----------------------+-----------------------------+
+
++-----------------------+----------------------+------------------------------+
+| Action                | CLI                  | Python API                   |
++=======================+======================+==============================+
+|| Get an authenticated || tapis auth init     || client = get_client()       |
+|| Tapis client         ||                     ||                             |
++-----------------------+----------------------+------------------------------+
+|| Using the client,    || tapis actors submit || client.actors.sendMessage() |
+|| send message to an   ||                     ||                             |
+|| Actor                ||                     ||                             |
++-----------------------+----------------------+------------------------------+
+|| Using the client,    || tapis jobs submit   || client.jobs.submit()        |
+|| submit HPC job to    ||                     ||                             |
+|| Tapis Application    ||                     ||                             |
++-----------------------+----------------------+------------------------------+
 
 In fact, the CLI is making the same calls to the Python API under the
 hood!
