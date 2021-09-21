@@ -11,8 +11,8 @@ steps, each contained in a separate Actor.
 
 In this section of the tutorial, we will deploy a simple
 ``upstream-messenger`` Actor that sends a message to the
-``example-actor`` that we deployed in the previous section. We will
-demonstrate that the downstream ``example-actor`` runs after it receives
+``hello-world-actor`` that we deployed in the previous section. We will
+demonstrate that the downstream ``hello-world-actor`` runs after it receives
 the message from ``upstream-messenger``.
 
 Create a New Actor Named ``upstream-messenger``
@@ -79,7 +79,7 @@ Edit Actor Source
 -----------------
 
 The Actor we just created doesn’t do much; it just says “hello world,”
-like the ``example-actor`` we deployed previously. Let’s change its
+like the ``hello-world-actor`` we deployed previously. Let’s change its
 behavior so it does something more interesting, like message another
 Actor. We will use the Python API command
 `sendMessage <https://agavepy.readthedocs.io/en/master/docsite/actors/actors.html#sendmessage-send-a-message-to-an-actor-mailbox>`__
@@ -107,7 +107,7 @@ to implement this. Using your favorite text editor, edit the
        # downstream_actor_id = os.environ['DOWNSTREAM_ACTOR_ID']
 
        # Using our Tapis client, send a message to the downstream Actor
-       message = 'greetings, example-actor!'
+       message = 'greetings, hello-world-actor!'
        print("Sending message '{}' to {}".format(message, downstream_actor_id))
        response = client.actors.sendMessage(actorId=downstream_actor_id, body={"message": message})
        print("Successfully triggered execution '{}' on actor '{}'".format(response['executionId'], downstream_actor_id))
@@ -141,7 +141,7 @@ environment, which we access via ``context['DOWNSTREAM_ACTOR_ID']`` or
 alternatively ``os.environ['DOWNSTREAM_ACTOR_ID']``. To set the
 ``DOWNSTREAM_ACTOR_ID``, we need only define it in the Actor environment
 when we deploy in the next step. The downstream Actor is the
-``example-actor`` we deployed previously, and we can retrieve its ID
+``hello-world-actor`` we deployed previously, and we can retrieve its ID
 using the CLI:
 
 .. code:: bash
@@ -150,7 +150,7 @@ using the CLI:
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
    | id            | name               | owner | image                         | lastUpdateTime           | status | cronOn |
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | example-actor      | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
+   | MqqbarbazBB8x | hello-world-actor      | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
 
 We will need this Actor ID (``MqqbarbazBB8x`` in my case, yours will be
@@ -198,7 +198,7 @@ If deployment was successful, we should now see two available Actors:
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
    | id            | name               | owner | image                             | lastUpdateTime           | status | cronOn |
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | example-actor      | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
+   | MqqbarbazBB8x | hello-world-actor      | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
    | MDfoobar7AOwx | upstream-messenger | eho   | taccuser/upstream-messenger:0.0.1 | 2021-08-24T20:23:07.619Z | READY  | False  |
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
 
@@ -235,15 +235,15 @@ it finishes:
    +-----------+-----------------------------+
    $ tapis actors execs logs MDfoobar7AOwx MDanexec7AOwx
    Actor received message: hello, upstream-messenger!
-   Sending message 'greetings, example-actor!' to MqqbarbazBB8x
+   Sending message 'greetings, hello-world-actor!' to MqqbarbazBB8x
    Successfully triggered execution '5P7foobarrrA6' on actor 'MqqbarbazBB8x'
 
-Check Execution of Downstream ``example-actor``
+Check Execution of Downstream ``hello-world-actor``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The goal of this tutorial was to send a message to
 ``upstream-messenger`` and have it trigger an execution on
-``example-actor``. Let’s check the status of the execution and inspect
+``hello-world-actor``. Let’s check the status of the execution and inspect
 the logs:
 
 .. code:: bash
@@ -260,7 +260,7 @@ the logs:
    +-----------+-----------------------------+
    $ tapis actors execs logs MqqbarbazBB8x 5P7foobarrrA6 
    Logs for execution 5P7foobarrrA6 
-    Actor received message: hello, example-actor!
+    Actor received message: hello, hello-world-actor!
 
 Conclusion
 ~~~~~~~~~~
