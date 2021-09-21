@@ -15,6 +15,7 @@ Automating Work with Tapis Actors
    hello-world-actor/01.buildhelloworld
    slackbot-actor/01.slackbot
    upstream-messenger/00.deployupstream
+   fastq-pipeline/00.deploypipeline
 
 Indices and tables
 ==================
