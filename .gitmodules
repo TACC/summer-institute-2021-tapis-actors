@@ -1,0 +1,3 @@
+[submodule "src/fastqc_app"]
+	path = src/fastqc_app
+	url = git@github.com:eho-tacc/fastqc_app.git
