@@ -77,8 +77,8 @@ Let’s make an empty one now:
 
    echo '{}' > secrets.json
 
-Edit Actor Source
------------------
+Edit ``upstream-messenger`` Source
+----------------------------------
 
 The Actor we just created doesn’t do much; it just says “hello world,”
 like the ``hello-world-actor`` we deployed previously. Let’s change its
@@ -135,16 +135,20 @@ All we’ve done is add a block of code that calls the Tapis/Agave API so
 that it sends a message to another Actor. Notice that we are mimicking
 the CLI workflow from before:
 
-+----------------------+----------------------+-----------------------------+
-| Action               | CLI                  | Python API                  |
-+======================+======================+=============================+
-| Get an authenticated | tapis auth init      | client = get_client()       |
-| Tapis client         |                      |                             |
-+----------------------+----------------------+-----------------------------+
-| Using the client,    | tapis actors submit  | client.actors.sendMessage() |
-| send message to an   |                      |                             |
-| Actor                |                      |                             |
-+----------------------+----------------------+-----------------------------+
++-----------------------+----------------------+------------------------------+
+| Action                | CLI                  | Python API                   |
++=======================+======================+==============================+
+|| Get an authenticated || tapis auth init     || client = get_client()       |
+|| Tapis client         ||                     ||                             |
++-----------------------+----------------------+------------------------------+
+|| Using the client,    || tapis actors submit || client.actors.sendMessage() |
+|| send message to an   ||                     ||                             |
+|| Actor                ||                     ||                             |
++-----------------------+----------------------+------------------------------+
+|| Using the client,    || tapis jobs submit   || client.jobs.submit()        |
+|| submit HPC job to    ||                     ||                             |
+|| Tapis Application    ||                     ||                             |
++-----------------------+----------------------+------------------------------+
 
 In fact, the CLI is making the same calls to the Python API under the
 hood!
@@ -171,8 +175,69 @@ using the CLI:
 We will need this Actor ID (``MqqbarbazBB8x`` in my case, yours will be
 different) when we deploy in the next section.
 
-Deploy Actor
-------------
+Deploy Another Actor ``fastqc-launcher``
+----------------------------------------
+
+We also want to create the downstream Actor: one that launches an submits an HPC job to a 
+Tapis App. Recall that Tapis apps are wrappers around computationally intensive processes. They are similar
+to Actors in that they can be managed using the Tapis API, but unlike Actors, they are HPC jobs under the
+hood.
+
+.. image:: ../images/20210916_taccster_actors_pipeline.png
+   :width: 600
+   :alt: A basic data pipeline for running FastQC
+
+
+Similar to the ``upstream-messenger``, this new Actor (which we will call ``fastqc-launcher``) leverages the active Tapis client 
+to interact with the Tapis ecosystem. In this case, we will submit to a 
+Tapis Application instead of messaging another Actor. We instantiate a new 
+Actor as before:
+
+.. code:: bash
+
+   tapis actors init --template default --actor-name fastqc-launcher
+   cd fastqc_launcher
+   echo '{}' > secrets.json
+
+We also edit the Actor source code in ``default.py`` so it resembles:
+
+.. code:: python
+
+   import os
+   from agavepy.actors import get_context, get_client
+
+
+   def main():
+      context = get_context()
+      fastq_path = context['raw_message']
+      print("Actor received message: {}".format(fastq_path))
+
+      # Validate the fastq file. Here, we merely check that the path looks
+      # like a valid Agave/Tapis URI
+      assert fastq_path.startswith('agave://')
+
+      # Get an active Tapis client
+      client = get_client()
+
+      # Using our Tapis client, submit a job to Tapis App eho-fastqc-0.11.9
+      body = {
+         "name": "fastqc-test",
+         "appId": "eho-fastqc-0.11.9",
+         "archive": false,
+         "inputs": {
+            "fastq": fastq_path
+         }
+      }
+      response = client.jobs.submit(body=body)
+      print("Successfully submitted job {} to Tapis App {}".format(response['id'], response['appId']))
+
+
+   if __name__ == '__main__':
+       main()
+
+
+Deploy Actor ``upstream-messenger``
+-----------------------------------
 
 Our new ``upstream-messenger`` Actor is now ready to deploy. Just like
 before, we want to:
