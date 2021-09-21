@@ -155,7 +155,7 @@ using the CLI:
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
    | id            | name               | owner | image                         | lastUpdateTime           | status | cronOn |
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | hello-world-actor      | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
+   | MqqbarbazBB8x | hello-world-actor  | eho   | tacc/hello-world:latest       | 2021-08-24T19:13:44.036Z | READY  | False  |
    +---------------+--------------------+-------+-------------------------------+--------------------------+--------+--------+
 
 We will need this Actor ID (``MqqbarbazBB8x`` in my case, yours will be
@@ -195,7 +195,7 @@ DockerHub username.
    | cronOn         | False                             |
    +----------------+-----------------------------------+
 
-If deployment was successful, we should now see two available Actors:
+If deployment was successful, we should now see our new Actor:
 
 .. code:: bash
 
@@ -203,9 +203,43 @@ If deployment was successful, we should now see two available Actors:
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
    | id            | name               | owner | image                             | lastUpdateTime           | status | cronOn |
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
-   | MqqbarbazBB8x | hello-world-actor      | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
+   | MqqbarbazBB8x | hello-world-actor  | eho   | tacc/hello-world:latest           | 2021-08-24T19:13:44.036Z | READY  | False  |
    | MDfoobar7AOwx | upstream-messenger | eho   | taccuser/upstream-messenger:0.0.1 | 2021-08-24T20:23:07.619Z | READY  | False  |
    +---------------+--------------------+-------+-----------------------------------+--------------------------+--------+--------+
+   $ tapis actors show -v MDfoobar7AOwx
+   {
+      "id": "MDfoobar7AOwx",
+      "name": "upstream-messenger",
+      "description": "Sends message to another actor",
+      "owner": "eho",
+      "image": "enho/upstream-messenger:0.0.1",
+      "createTime": "2021-09-21T20:35:33.39Z0",
+      "lastUpdateTime": "2021-09-21T20:35:33.39Z0",
+      "defaultEnvironment": {
+         "DOWNSTREAM_ACTOR_ID": "MqqbarbazBB8x"
+      },
+      "gid": 859336,
+      "hints": [],
+      "link": "",
+      "mounts": [],
+      "privileged": false,
+      "queue": "default",
+      "stateless": true,
+      "status": "READY",
+      "statusMessage": " ",
+      "token": true,
+      "uid": 859336,
+      "useContainerUid": false,
+      "webhook": "",
+      "cronOn": false,
+      "cronSchedule": null,
+      "cronNextEx": null,
+      "_links": {
+         "executions": "https://api.tacc.utexas.edu/actors/v2/MDfoobar7AOwx/executions",
+         "owner": "https://api.tacc.utexas.edu/profiles/v2/eho",
+         "self": "https://api.tacc.utexas.edu/actors/v2/MDfoobar7AOwx"
+      }
+   }
 
 Send Message to ``upstream-messenger`` Using CLI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
