@@ -26,10 +26,11 @@ Initialize a New Actor ``slackbot-actor``
 
    $ mkdir slackbot_actor
    $ cd slackbot_actor
+   $ touch Dockerfile actor.py
    $ find -L .
    .
    ./Dockerfile
-   ./actor.py  $ touch Dockerfile actor.py
+   ./actor.py  
 
 Edit the Actor Source Code in ``actor.py``
 ------------------------------------------

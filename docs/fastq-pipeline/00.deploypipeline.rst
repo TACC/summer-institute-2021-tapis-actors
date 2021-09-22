@@ -19,7 +19,9 @@ validating DNA sequencing data.
 
 We will leverage a few additional Actor capabilities beyond what we have covered previously:
 
-* Actors can interact with TACC filesystems such as ``/work``
+* Actors can interact with TACC filesystems such as ``/work`` using the Tapis API
+   * We won't cover this in depth today, but if you're interested in Tapis Files, 
+     please consult the `Tapis documentation <https://tapis.readthedocs.io/en/latest/technical/files.html>`_ 
 * Actors can submit HPC jobs, by submitting to Tapis Applications
 
 Reusing as much of our previous work as possible, pipeline deployment will consist of the following steps:
@@ -132,10 +134,10 @@ Using your favorite text editor, edit the ``default.py`` for ``upstream-messenge
       # upload our fastq file to TACC Stockyard using 
       url = "https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq"
       systemId = 'eho.work.storage'
-      files_resp = client.files.files.importData(
-         filePath='example.fastq', fileToUpload=None, 
+      files_resp = client.files.importData(
+         fileName='example.fastq',
+         filePath='/', 
          systemId=systemId, urlToIngest=url)
-      print(files_resp)
       
       # Using our Tapis client, send the message containing file path 
       # to the downstream Actor
@@ -218,21 +220,103 @@ it finishes:
    Sending message 'greetings, hello-world-actor!' to MqqbarbazBB8x
    Successfully triggered execution '5P7foobarrrA6' on actor 'MqqbarbazBB8x'
 
+Check File Upload
+~~~~~~~~~~~~~~~~~
+
+Using the Tapis CLI, we can check that the ``upstream-messenger`` created the expected file:
+
+.. code-block:: bash
+
+   $ tapis files show agave://eho.work.storage/example.fastq
+   +--------------+-------------------------------+
+   | Field        | Value                         |
+   +--------------+-------------------------------+
+   | name         | example.fastq                 |
+   | path         | /work/06634/eho/example.fastq |
+   | lastModified | 20 seconds ago                |
+   | length       | 64431                         |
+   | permissions  | READ_WRITE                    |
+   | mimeType     | application/octet-stream      |
+   | type         | file                          |
+   +--------------+-------------------------------+
+
 Check Execution of Downstream ``fastqc-launcher``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Let’s check the status of the execution and inspect the logs:
 
 .. code:: bash
 
-   $ tapis actors execs show MqqbarbazBB8x 5P7foobarrrA6 
-   +-----------+-----------------------------+
-   | Field     | Value                       |
-   +-----------+-----------------------------+
-   | actorId   | MqqbarbazBB8x               |
-   | apiServer | https://api.tacc.utexas.edu |
-   | id        | 5P7foobarrrA6               |
-   | status    | COMPLETE                    |
-   | workerId  | DJPworkerzKlN               |
-   +-----------+-----------------------------+
-   # TODO
+   $ tapis actors execs logs MqqbarbazBB8x wKoAJD5NykAKN
+   Logs for execution wKoAJD5NykAKN
+   Actor received message: agave://eho.work.storage/example.fastq
+   Successfully submitted job 6c9d5842-XXXX-XXXX-XXXX-f07b1f73b948-007 to Tapis App eho-fastqc-0.11.9
+
+Check Job Submitted to FastQC Tapis App
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Finally, let's check that our test job using the FastQC Tapis App successfully finished.
+We can check the status of this job using the CLI:
+
+.. code-block:: bash
+
+   $ tapis jobs show 6c9d5842-XXXX-XXXX-XXXX-f07b1f73b948-007
+   +--------------------+---------------------------------------------------------------------------------+
+   | Field              | Value                                                                           |
+   +--------------------+---------------------------------------------------------------------------------+
+   | accepted           | 2021-09-22T21:39:06.147Z                                                        |
+   | appId              | eho-fastqc-0.11.9                                                               |
+   | appUuid            | 4765625137153839596-XXXXXXXX-0001-005                                           |
+   | archive            | False                                                                           |
+   | archivePath        | eho/archive/jobs/job-XXXXXXXX-XXXX-XXXX-afbf-f07b1f73b948-007                   |
+   | archiveSystem      | None                                                                            |
+   | blockedCount       | 0                                                                               |
+   | created            | 2021-09-22T21:39:06.152Z                                                        |
+   | ended              | 4 minutes ago                                                                   |
+   | failedStatusChecks | 0                                                                               |
+   | id                 | 6c9d5842-3066-XXXX-XXXX-f07b1f73b948-007                                        |
+   | lastStatusCheck    | 4 minutes ago                                                                   |
+   | lastStatusMessage  | Transitioning from status CLEANING_UP to FINISHED in phase ARCHIVING.           |
+   | lastUpdated        | 2021-09-22T21:40:52.194Z                                                        |
+   | maxHours           | 0.5                                                                             |
+   | memoryPerNode      | 1.0                                                                             |
+   | name               | fastqc-test                                                                     |
+   | nodeCount          | 1                                                                               |
+   | owner              | eho                                                                             |
+   | processorsPerNode  | 1                                                                               |
+   | remoteEnded        | 4 minutes ago                                                                   |
+   | remoteJobId        | 8493758                                                                         |
+   | remoteOutcome      | FINISHED                                                                        |
+   | remoteQueue        | normal                                                                          |
+   | remoteStarted      | 2021-09-22T21:39:42.702Z                                                        |
+   | remoteStatusChecks | 2                                                                               |
+   | remoteSubmitted    | 5 minutes ago                                                                   |
+   | schedulerJobId     | None                                                                            |
+   | status             | FINISHED                                                                        |
+   | submitRetries      | 0                                                                               |
+   | systemId           | eho.stampede2.execution                                                         |
+   | tenantId           | tacc.prod                                                                       |
+   | tenantQueue        | aloe.jobq.tacc.prod.submit.DefaultQueue                                         |
+   | visible            | True                                                                            |
+   | workPath           | /scratch/06634/eho/eho/job-XXXXXXXX-XXXX-XXXX-XXXX-f07b1f73b948-007-fastqc-test |
+   +--------------------+---------------------------------------------------------------------------------+
+
+We can also download and inspect the job outputs:
+
+.. code-block:: bash
+
+   $ tapis jobs outputs download 6c9d5842-XXXX-XXXX-XXXX-f07b1f73b948-007
+   +-------------+-------+
+   | Field       | Value |
+   +-------------+-------+
+   | downloaded  | 11    |
+   | skipped     | 0     |
+   | messages    | 5     |
+   | elapsed_sec | 59    |
+   +-------------+-------+
+   $ cd 6c9d5842-3066-XXXX-XXXX-f07b1f73b948-007
+   $ cat ./*.err
+   # ...
+   Started analysis of example.fastq
+   $ cat ./*.out
+   Analysis complete for example.fastq
