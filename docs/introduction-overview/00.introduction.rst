@@ -1,7 +1,23 @@
-Introduction to Actors
+Introduction to Tapis Actors
 ======================
 
-Tapis Actors are a form of *serverless computing* like AWS Lambda, 
+What is Tapis?
+--------------
+Tapis is TACC’s Application Programming Interface
+    - Science-as-a-Service platform
+    - Web services that provide access to TACC resources
+    - Can provide access to other resources
+    - Supports common file and compute job operations
+    - Used by TACC Portals
+  
+More information about Tapis and its current and future capabilities is available at:
+`The Tapis Project <https://tapis-project.org>`_
+
+
+What is Tapis Actors?
+---------------------
+
+Tapis Actors is a form of *serverless computing* like AWS Lambda, 
 Firebase Functions, or OpenFaas, but are tailored to support the 
 needs of research computing.
 
