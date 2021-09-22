@@ -19,14 +19,14 @@ validating DNA sequencing data.
 
 We will leverage a few additional Actor capabilities beyond what we have covered previously:
 
-* Actors can access TACC's Stockyard (AKA ``/work``) filesystem
+* Actors can interact with TACC filesystems such as ``/work``
 * Actors can submit HPC jobs, by submitting to Tapis Applications
 
 Reusing as much of our previous work as possible, pipeline deployment will consist of the following steps:
 
 * Deploy a Tapis App ``eho-fastqc-0.11.9`` that runs the `FastQC tool <https://github.com/sequana/fastqc>`_ as HPC job
 * Deploy new actor ``fastqc-launcher``
-* Change ``upstream-messenger`` so it downloads a fastq data file from the web to TACC Stockyard filesystem
+* Change ``upstream-messenger`` so it uploads a fastq data file from the web to TACC Stockyard filesystem
 * Re-deploy ``upstream-messenger`` so it sends the path to data file to the ``fastqc-launcher``
 
 Since deploying Tapis Apps is outside the scope of this tutorial, I have already completed the first step. 
@@ -41,11 +41,6 @@ Here, we will create an Actor that launches an submits an HPC job to a
 Tapis App. Recall that Tapis Apps are wrappers around computationally intensive processes. They are similar
 to Actors in that they can be managed using the Tapis API, but unlike Actors, they are HPC jobs under the
 hood.
-
-.. image:: ../images/20210916_taccster_actors_pipeline.png
-   :width: 600
-   :alt: A basic data pipeline for running FastQC
-
 
 Similar to the ``upstream-messenger``, this new Actor (which we will call ``fastqc-launcher``) leverages the active Tapis client 
 to interact with the Tapis ecosystem. In this case, we will submit to a 
@@ -68,8 +63,13 @@ We edit the Actor source code in ``default.py`` so it resembles:
 
    def main():
       context = get_context()
-      fastq_path = context['raw_message']
-      print("Actor received message: {}".format(fastq_path))
+      fastq_uri = context['raw_message']
+      print("Actor received message: {}".format(fastq_uri))
+
+      # Usually, one would perform some input validation before submitting
+      # a job to a Tapis App. Here, we simply validate that the path looks
+      # like a Tapis/Agave URI
+      assert fastq_uri.startswith('agave://')
 
       # Get an active Tapis client
       client = get_client()
@@ -80,7 +80,7 @@ We edit the Actor source code in ``default.py`` so it resembles:
          "appId": "eho-fastqc-0.11.9",
          "archive": False,
          "inputs": {
-            "fastq": "agave://eho.work.storage/{}".format(os.path.basename(fastq_path))
+            "fastq": "agave://eho.work.storage/{}".format(os.path.basename(fastq_uri))
          }
       }
       response = client.jobs.submit(body=body)
@@ -114,14 +114,6 @@ Using your favorite text editor, edit the ``default.py`` for ``upstream-messenge
    import requests
 
 
-   def download_fastq(fastq_path) -> None:
-      """Download a demo fastq file from the web to path `fastq_path`."""
-      url = 'https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq'
-      fq_file = requests.get(url, allow_redirects=True)
-      with open(fastq_path, 'wb') as f:
-         f.write(fq_file.content)
-
-
    def main():
       """Main entrypoint"""
       context = get_context()
@@ -136,13 +128,18 @@ Using your favorite text editor, edit the ``default.py`` for ``upstream-messenge
       # alternatively:
       # downstream_actor_id = os.environ['DOWNSTREAM_ACTOR_ID']
 
-      # Download our fastq file to TACC Stockyard
-      fastq_path = '/work/06634/eho/my_reads.fastq'
-      download_fastq(fastq_path)
-
+      # Using our Tapis client, 
+      # upload our fastq file to TACC Stockyard using 
+      url = https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq
+      systemId = 'eho.work.storage'
+      files_resp = client.files.files.importData(
+         filePath='example.fastq', fileToUpload=None, 
+         systemId=systemId, urlToIngest=url)
+      print(files_resp)
+      
       # Using our Tapis client, send the message containing file path 
       # to the downstream Actor
-      message = fastq_path
+      message = "agave://{}/{}".format(systemId, files_resp['path'])
       print("Sending message '{}' to {}".format(message, downstream_actor_id))
       response = client.actors.sendMessage(actorId=downstream_actor_id, body={"message": message})
       print("Successfully triggered execution '{}' on actor '{}'".format(response['executionId'], downstream_actor_id))
