@@ -130,7 +130,7 @@ Using your favorite text editor, edit the ``default.py`` for ``upstream-messenge
 
       # Using our Tapis client, 
       # upload our fastq file to TACC Stockyard using 
-      url = https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq
+      url = "https://raw.githubusercontent.com/eho-tacc/fastqc_app/main/tests/data_R1_001.fastq"
       systemId = 'eho.work.storage'
       files_resp = client.files.files.importData(
          filePath='example.fastq', fileToUpload=None, 
@@ -179,6 +179,8 @@ Actor, we can instead:
    | cronOn         | False                             |
    +----------------+-----------------------------------+
 
+Test the Pipeline
+-----------------
 
 Send Message to ``upstream-messenger`` Using CLI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

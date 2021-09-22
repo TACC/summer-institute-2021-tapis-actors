@@ -4,8 +4,13 @@ from agavepy.actors import get_context, get_client
 
 def main():
    context = get_context()
-   fastq_path = context['raw_message']
-   print("Actor received message: {}".format(fastq_path))
+   fastq_uri = context['raw_message']
+   print("Actor received message: {}".format(fastq_uri))
+
+   # Usually, one would perform some input validation before submitting
+   # a job to a Tapis App. Here, we simply validate that the path looks
+   # like a Tapis/Agave URI
+   assert fastq_uri.startswith('agave://')
 
    # Get an active Tapis client
    client = get_client()
@@ -16,7 +21,7 @@ def main():
       "appId": "eho-fastqc-0.11.9",
       "archive": False,
       "inputs": {
-         "fastq": "agave://eho.work.storage/{}".format(os.path.basename(fastq_path))
+         "fastq": "agave://eho.work.storage/{}".format(os.path.basename(fastq_uri))
       }
    }
    response = client.jobs.submit(body=body)
@@ -25,3 +30,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
