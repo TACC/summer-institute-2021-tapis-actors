@@ -204,4 +204,4 @@ Actors can be deleted with the following:
 This will delete the actor and any associated executions.
 Actors can also be updated with the ``tapis actors update`` command to make changes once created.
 
-Need help?  Ask your questions using the [TACC-Learn Slack Channel] on #2021_crt_tapis channel.
+Need help?  Ask your questions using the [TACCSTER  2021 Slack Workspace] using the #tutorial-automating-work-at-tacc-with-tapis-actors channel.
