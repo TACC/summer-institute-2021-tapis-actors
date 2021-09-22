@@ -17,14 +17,13 @@ Depending on the configuration of your specific Tapis Actors *tenant*, the follo
 additional assumptions may apply. For the ``tacc.prod`` tenant running at TACC, they 
 absolutely do. 
     #. A Tapis access token is available via an environment variable
-    #. The TACC ``$WORK`` filesystem is mounted and writeable at ``/work``
     #. Code will run as your TACC-default user and group ID
 
 
 Workflow
 --------
 
-The workflow for bworking with Actors will be covered in detail 
+The workflow for working with Actors will be covered in detail 
 in this tutorial, but briefly, is as follows:
 
     - Write code and package into a Docker container
